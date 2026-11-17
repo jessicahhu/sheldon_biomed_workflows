@@ -37,7 +37,7 @@ import anthropic
 
 HERE = Path(__file__).resolve().parent
 VENV = HERE / ".sandbox_venv"
-MAX_TURNS = 40
+MAX_TURNS = 60
 TOOL_TIMEOUT_S = 180
 
 TOOLS = [{
@@ -303,8 +303,20 @@ def main():
     log, step, final_text = [], 0, ""
     try:
         for _ in range(MAX_TURNS):
-            resp = client.messages.create(model=model, max_tokens=16000, system=system,
-                                          messages=messages, tools=TOOLS)
+            try:
+                resp = client.messages.create(model=model, max_tokens=16000, system=system,
+                                              messages=messages, tools=TOOLS)
+            except anthropic.BadRequestError as e:
+                # Gateway quirk: after format conversion, a turn holding only tool results can be
+                # seen as "not a user message". Add a short text block to it and retry once.
+                if "must end with a user message" not in str(e) or messages[-1]["role"] != "user":
+                    raise
+                print("  (gateway rejected the turn; retrying with a 'Continue.' note)", file=sys.stderr)
+                last = messages[-1]["content"]
+                if isinstance(last, list):
+                    last.append({"type": "text", "text": "Continue."})
+                resp = client.messages.create(model=model, max_tokens=16000, system=system,
+                                              messages=messages, tools=TOOLS)
             messages.append({"role": "assistant", "content": resp.content})
             results = []
             for b in resp.content:
