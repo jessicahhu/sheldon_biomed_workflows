@@ -1,0 +1,15 @@
+{
+  "id": "paper_1",
+  "source_paper": "Zhang et al. 2015, Hum Mol Genet (never sent to the agent; see replication/zhang2015/paper_card.md)",
+  "question": "Is genetically predicted longer leukocyte telomere length causally associated with lung cancer risk, and does the effect differ between lung adenocarcinoma and squamous cell carcinoma? Report the effect as an odds ratio per 1 kb longer telomere length.",
+  "files": {
+    "exposure_telomere_length_snps.tsv": {
+      "from": "../../replication/zhang2015/data/exposure_zhang2015_table2.tsv",
+      "keep_columns": ["snp", "chr", "locus", "long_allele", "beta_kb", "p"]
+    },
+    "outcome_lung_all.tsv": {"from": "../../replication/zhang2015/data/raw/lung_all_GCST004748.tsv"},
+    "outcome_lung_adenocarcinoma.tsv": {"from": "../../replication/zhang2015/data/raw/lung_adeno_GCST004744.tsv"},
+    "outcome_lung_squamous.tsv": {"from": "../../replication/zhang2015/data/raw/lung_squam_GCST004750.tsv"}
+  },
+  "data_description": "exposure_telomere_length_snps.tsv: genome-wide significant SNPs for leukocyte telomere length from published European-ancestry GWAS. beta_kb = change in telomere length (kb) per copy of long_allele; p = GWAS p-value. No standard errors are given. Some SNPs may be in linkage disequilibrium with each other.\noutcome_*.tsv: European-ancestry lung cancer case-control GWAS summary statistics (log-odds betas per effect_allele), restricted to the exposure SNPs. Not every SNP is present in every file."
+}

@@ -1,0 +1,112 @@
+== Instruments (Zhang Table 2; SE back-derived from P) ==
+       snp  locus long_allele  beta_kb  se_kb  F_approx        used_in_zhang
+rs10936599   TERC           C    0.117 0.0100  135.5523                  yes
+ rs2736100   TERT           C    0.094 0.0105   79.6811                  yes
+ rs7726159   TERT           A    0.073 0.0087   70.4587 no_LD_with_rs2736100
+ rs7675998   NAF1           G    0.090 0.0111   66.0936                  yes
+ rs9420907  OBFC1           C    0.083 0.0127   42.5471                  yes
+ rs6772228    PXK           T    0.120 0.0192   39.1623                  yes
+ rs8105767 ZNF208           G    0.058 0.0095   37.1390                  yes
+  rs755017  RTEL1           G    0.074 0.0128   33.6200                  yes
+  rs412658 ZNF676           T    0.050 0.0087   32.8805 no_LD_with_rs8105767
+ rs3027234   CTC1           C    0.057 0.0102   31.2232                  yes
+rs11125529  ACYP2           A    0.067 0.0122   29.9211                  yes
+Kept 9 SNPs (Zhang excluded rs7726159, rs412658 for LD). Min F ~ 30 -> no weak instruments.
+
+==================== lung_adeno (lung_adeno_GCST004744.tsv) ====================
+[extract] 9/9 SNPs found; missing: none (proxies needed if any)
+[harmonise] rs6772228: PALINDROMIC A/T; long allele T has outcome freq 0.95 - strand cannot be confirmed without exposure-study allele freq
+[per-SNP] Wald ratio OR per kb:
+       snp  locus      by  standard_error  p_value  ratio_or
+rs10936599   TERC  0.0794          0.0190   0.0000    1.9709
+ rs2736100   TERT  0.1817          0.0163   0.0000    6.9131
+ rs7675998   NAF1  0.0894          0.0194   0.0000    2.6992
+ rs9420907  OBFC1  0.1393          0.0224   0.0000    5.3559
+ rs6772228    PXK -0.0210          0.0386   0.5855    0.8392
+ rs8105767 ZNF208  0.0409          0.0178   0.0216    2.0240
+  rs755017  RTEL1  0.0410          0.0250   0.1014    1.7412
+ rs3027234   CTC1  0.0384          0.0194   0.0478    1.9628
+rs11125529  ACYP2  0.0276          0.0234   0.2391    1.5091
+[IVW fixed  ] OR 2.75 (2.35-3.23), P=6.8e-36   <- Zhang's primary method
+[IVW mult-RE] OR 2.75 (1.79-4.24), P=4.1e-06
+[Cochran Q  ] Q=59.0, df=8, P=7.2e-10
+[MR-Egger   ] OR 2.98 (0.45-19.67), P=0.29; intercept -0.0068 (P=0.94)
+[W. median  ] OR 2.02 (1.56-2.61), P=8.4e-08
+[leave-one-out IVW]
+   drop rs10936599  (TERC  ) OR 3.08 (2.56-3.70), P=2.6e-33
+   drop rs2736100   (TERT  ) OR 2.13 (1.78-2.55), P=1.7e-16
+   drop rs7675998   (NAF1  ) OR 2.76 (2.33-3.28), P=2.9e-31
+   drop rs9420907   (OBFC1 ) OR 2.58 (2.18-3.05), P=6.3e-29
+   drop rs6772228   (PXK   ) OR 2.99 (2.53-3.52), P=5.1e-39
+   drop rs8105767   (ZNF208) OR 2.82 (2.39-3.32), P=5.6e-35
+   drop rs755017    (RTEL1 ) OR 2.83 (2.40-3.33), P=9.8e-36
+   drop rs3027234   (CTC1  ) OR 2.81 (2.39-3.31), P=2.9e-35
+   drop rs11125529  (ACYP2 ) OR 2.85 (2.42-3.35), P=2.8e-36
+[no palindromic] OR 2.99 (2.53-3.52), P=5.1e-39
+
+==================== lung_all (lung_all_GCST004748.tsv) ====================
+[extract] 8/9 SNPs found; missing: ['rs2736100'] (proxies needed if any)
+[harmonise] rs6772228: PALINDROMIC A/T; long allele T has outcome freq 0.95 - strand cannot be confirmed without exposure-study allele freq
+[per-SNP] Wald ratio OR per kb:
+       snp  locus      by  standard_error  p_value  ratio_or
+rs10936599   TERC  0.0415          0.0137   0.0024    1.4252
+ rs7675998   NAF1  0.0489          0.0141   0.0005    1.7218
+ rs9420907  OBFC1  0.0619          0.0164   0.0002    2.1078
+ rs6772228    PXK -0.0173          0.0281   0.5378    0.8655
+ rs8105767 ZNF208  0.0078          0.0129   0.5453    1.1439
+  rs755017  RTEL1  0.0139          0.0181   0.4414    1.2069
+ rs3027234   CTC1  0.0198          0.0141   0.1604    1.4150
+rs11125529  ACYP2  0.0229          0.0169   0.1760    1.4072
+[IVW fixed  ] OR 1.43 (1.26-1.63), P=6.5e-08   <- Zhang's primary method
+[IVW mult-RE] OR 1.43 (1.21-1.69), P=2.1e-05
+[Cochran Q  ] Q=11.3, df=7, P=0.12
+[MR-Egger   ] OR 1.44 (0.74-2.82), P=0.33; intercept -0.0006 (P=0.98)
+[W. median  ] OR 1.42 (1.20-1.69), P=7.2e-05
+[leave-one-out IVW]
+   drop rs10936599  (TERC  ) OR 1.44 (1.23-1.68), P=7.7e-06
+   drop rs7675998   (NAF1  ) OR 1.38 (1.19-1.59), P=1.4e-05
+   drop rs9420907   (OBFC1 ) OR 1.36 (1.19-1.57), P=1.1e-05
+   drop rs6772228   (PXK   ) OR 1.50 (1.31-1.71), P=6e-09
+   drop rs8105767   (ZNF208) OR 1.46 (1.28-1.68), P=4.4e-08
+   drop rs755017    (RTEL1 ) OR 1.45 (1.27-1.66), P=6.7e-08
+   drop rs3027234   (CTC1  ) OR 1.43 (1.25-1.64), P=1.8e-07
+   drop rs11125529  (ACYP2 ) OR 1.43 (1.25-1.64), P=1.7e-07
+[no palindromic] OR 1.50 (1.31-1.71), P=6e-09
+
+==================== lung_squam (lung_squam_GCST004750.tsv) ====================
+[extract] 9/9 SNPs found; missing: none (proxies needed if any)
+[harmonise] rs6772228: PALINDROMIC A/T; long allele T has outcome freq 0.95 - strand cannot be confirmed without exposure-study allele freq
+[per-SNP] Wald ratio OR per kb:
+       snp  locus      by  standard_error  p_value  ratio_or
+rs10936599   TERC -0.0232          0.0216   0.2843    0.8203
+ rs2736100   TERT  0.0056          0.0187   0.7655    1.0612
+ rs7675998   NAF1  0.0200          0.0225   0.3732    1.2490
+ rs9420907  OBFC1 -0.0187          0.0266   0.4820    0.7981
+ rs6772228    PXK -0.0124          0.0456   0.7858    0.9019
+ rs8105767 ZNF208 -0.0182          0.0208   0.3817    0.7309
+  rs755017  RTEL1 -0.0053          0.0292   0.8551    0.9304
+ rs3027234   CTC1  0.0191          0.0226   0.3978    1.3977
+rs11125529  ACYP2  0.0036          0.0271   0.8932    1.0558
+[IVW fixed  ] OR 0.96 (0.80-1.16), P=0.7   <- Zhang's primary method
+[IVW mult-RE] OR 0.96 (0.80-1.16), P=0.7
+[Cochran Q  ] Q=4.0, df=8, P=0.86
+[MR-Egger   ] OR 0.81 (0.38-1.73), P=0.61; intercept 0.0151 (P=0.66)
+[W. median  ] OR 0.93 (0.73-1.18), P=0.56
+[leave-one-out IVW]
+   drop rs10936599  (TERC  ) OR 1.02 (0.82-1.26), P=0.85
+   drop rs2736100   (TERT  ) OR 0.94 (0.76-1.16), P=0.55
+   drop rs7675998   (NAF1  ) OR 0.92 (0.76-1.13), P=0.44
+   drop rs9420907   (OBFC1 ) OR 0.98 (0.81-1.19), P=0.85
+   drop rs6772228   (PXK   ) OR 0.97 (0.80-1.17), P=0.75
+   drop rs8105767   (ZNF208) OR 0.98 (0.81-1.19), P=0.87
+   drop rs755017    (RTEL1 ) OR 0.97 (0.80-1.17), P=0.73
+   drop rs3027234   (CTC1  ) OR 0.94 (0.78-1.14), P=0.55
+   drop rs11125529  (ACYP2 ) OR 0.96 (0.79-1.16), P=0.67
+[no palindromic] OR 0.97 (0.80-1.17), P=0.75
+
+== Replication scorecard (IVW fixed, OR per 1 kb TL) ==
+outcome             published                   replicated                  dir  sig  pub OR in our CI
+lung_all            1.65 (1.39-1.96) P=1e-08   1.43 (1.26-1.63) P=6e-08   Y    Y    N
+lung_adeno          2.87 (2.20-3.74) P=6e-15   2.75 (2.35-3.23) P=7e-36   Y    Y    Y
+lung_squam          1.04 (0.79-1.36) P=0.8   0.96 (0.80-1.16) P=0.7   Y    Y    Y
+lung_adeno_noTERT   2.00 (1.48-2.70) P=7e-06   2.13 (1.78-2.55) P=2e-16   Y    Y    Y

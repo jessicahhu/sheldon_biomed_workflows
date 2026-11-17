@@ -1,0 +1,113 @@
+== Instruments: 7 literature SNPs (TL effects from Zhang 2015 Table 2) + 5p15.33 score (Kachuri Table 3) ==
+       snp  locus long_allele  beta_kb  se_kb
+rs11125529  ACYP2           A    0.067 0.0122
+ rs6772228    PXK           T    0.120 0.0192
+rs10936599   TERC           C    0.117 0.0100
+ rs7675998   NAF1           G    0.090 0.0111
+ rs9420907  OBFC1           C    0.083 0.0127
+  rs412658 ZNF676           T    0.050 0.0087
+  rs755017  RTEL1           G    0.074 0.0128 
+
+==================== lung_all  (lung_all) ====================
+  [harmonise] lung_all: rs6772228 [palindromic; long-allele ref freq 0.95; strand consistent]
+          snp   locus    bx      by     sy  wald_or
+   rs11125529   ACYP2 0.067  0.0229 0.0169   1.4072
+    rs6772228     PXK 0.120 -0.0173 0.0281   0.8655
+   rs10936599    TERC 0.117  0.0415 0.0137   1.4252
+    rs7675998    NAF1 0.090  0.0489 0.0141   1.7218
+    rs9420907   OBFC1 0.083  0.0619 0.0164   2.1078
+     rs412658  ZNF676 0.050  0.0189 0.0122   1.4581
+     rs755017   RTEL1 0.074  0.0139 0.0181   1.2069
+5p15.33_score 5p15.33 0.140  0.0392 0.0147   1.3233
+  -- 8 IVs (7 public + published 5p15.33): 8 instruments
+     IVW fixed   OR 1.42 (1.27-1.59), P=1.3e-09   | Cochran Q=10.9 df=7 P=0.14
+     IVW mult-RE OR 1.42 (1.23-1.64), P=1.1e-06
+     W. median   OR 1.41 (1.22-1.64), P=5.8e-06
+     MR-Egger    OR 1.20 (0.76-1.90), P=0.46; intercept 0.0167 (P=0.48)
+  -- 7 public SNPs only: 7 instruments
+     IVW fixed   OR 1.47 (1.28-1.68), P=3.5e-08   | Cochran Q=10.2 df=6 P=0.12
+     IVW mult-RE OR 1.47 (1.23-1.75), P=2.3e-05
+     W. median   OR 1.44 (1.20-1.72), P=7.7e-05
+     MR-Egger    OR 1.27 (0.65-2.49), P=0.52; intercept 0.0128 (P=0.68)
+
+==================== lung_adeno  (lung_adeno) ====================
+  [harmonise] lung_adeno: rs6772228 [palindromic; long-allele ref freq 0.95; strand consistent]
+          snp   locus    bx      by     sy  wald_or
+   rs11125529   ACYP2 0.067  0.0276 0.0234   1.5091
+    rs6772228     PXK 0.120 -0.0210 0.0386   0.8392
+   rs10936599    TERC 0.117  0.0794 0.0190   1.9709
+    rs7675998    NAF1 0.090  0.0894 0.0194   2.6992
+    rs9420907   OBFC1 0.083  0.1393 0.0224   5.3559
+     rs412658  ZNF676 0.050  0.0367 0.0168   2.0846
+     rs755017   RTEL1 0.074  0.0410 0.0251   1.7412
+5p15.33_score 5p15.33 0.140  0.0583 0.0168   1.5162
+  -- 8 IVs (7 public + published 5p15.33): 8 instruments
+     IVW fixed   OR 1.88 (1.62-2.17), P=4.5e-17   | Cochran Q=27.9 df=7 P=0.00023
+     IVW mult-RE OR 1.88 (1.40-2.51), P=2.6e-05
+     W. median   OR 1.72 (1.41-2.12), P=1.8e-07
+     MR-Egger    OR 1.20 (0.48-2.98), P=0.71; intercept 0.0460 (P=0.35)
+  -- 7 public SNPs only: 7 instruments
+     IVW fixed   OR 2.15 (1.78-2.59), P=1.5e-15   | Cochran Q=22.8 df=6 P=0.00087
+     IVW mult-RE OR 2.15 (1.49-3.10), P=4.2e-05
+     W. median   OR 2.01 (1.55-2.60), P=1.1e-07
+     MR-Egger    OR 1.66 (0.41-6.72), P=0.51; intercept 0.0229 (P=0.72)
+
+==================== lung_squam  (lung_squam) ====================
+  [harmonise] lung_squam: rs6772228 [palindromic; long-allele ref freq 0.95; strand consistent]
+          snp   locus    bx      by     sy  wald_or
+   rs11125529   ACYP2 0.067  0.0036 0.0271   1.0558
+    rs6772228     PXK 0.120 -0.0124 0.0456   0.9019
+   rs10936599    TERC 0.117 -0.0232 0.0216   0.8203
+    rs7675998    NAF1 0.090  0.0200 0.0225   1.2490
+    rs9420907   OBFC1 0.083 -0.0187 0.0266   0.7981
+     rs412658  ZNF676 0.050 -0.0088 0.0195   0.8381
+     rs755017   RTEL1 0.074 -0.0053 0.0292   0.9304
+5p15.33_score 5p15.33 0.140  0.0296 0.0224   1.2351
+  -- 8 IVs (7 public + published 5p15.33): 8 instruments
+     IVW fixed   OR 1.02 (0.85-1.21), P=0.87   | Cochran Q=4.5 df=7 P=0.72
+     IVW mult-RE OR 1.02 (0.85-1.21), P=0.87
+     W. median   OR 1.02 (0.80-1.28), P=0.89
+     MR-Egger    OR 1.23 (0.70-2.15), P=0.5; intercept -0.0193 (P=0.51)
+  -- 7 public SNPs only: 7 instruments
+     IVW fixed   OR 0.92 (0.74-1.15), P=0.48   | Cochran Q=2.3 df=6 P=0.89
+     IVW mult-RE OR 0.92 (0.74-1.15), P=0.48
+     W. median   OR 0.84 (0.64-1.10), P=0.2
+     MR-Egger    OR 0.86 (0.40-1.86), P=0.72; intercept 0.0062 (P=0.86)
+
+==================== hnc  (hnc_setA + hnc_setB) ====================
+  [harmonise] hnc_setA: rs6772228 [palindromic; long-allele ref freq 0.95; STRAND FLIPPED (inferred from frequency)]
+  [harmonise] hnc_setB: rs6772228 [palindromic; long-allele ref freq 0.95; STRAND FLIPPED (inferred from frequency)]
+  [harmonise] hnc_setA: rs10936599 via proxy rs11711621
+  [harmonise] hnc_setB: rs10936599 via proxy rs11711621
+  [harmonise] hnc_setA: rs412658 via proxy rs1277401554
+  [harmonise] hnc_setB: rs412658 via proxy rs1277401554
+          snp   locus    bx      by     sy  wald_or
+   rs11125529   ACYP2 0.067 -0.0262 0.0442   0.6761
+    rs6772228     PXK 0.120 -0.1649 0.0690   0.2530
+   rs10936599    TERC 0.117 -0.0177 0.0346   0.8594
+    rs7675998    NAF1 0.090  0.0086 0.0357   1.1001
+    rs9420907   OBFC1 0.083  0.0100 0.0427   1.1279
+     rs412658  ZNF676 0.050  0.0770 0.0307   4.6599
+     rs755017   RTEL1 0.074 -0.0545 0.0467   0.4788
+5p15.33_score 5p15.33 0.140 -0.0513 0.0269   0.6932
+  -- 8 IVs (7 public + published 5p15.33): 8 instruments
+     IVW fixed   OR 0.80 (0.62-1.03), P=0.081   | Cochran Q=14.7 df=7 P=0.04
+     IVW mult-RE OR 0.80 (0.55-1.15), P=0.23
+     W. median   OR 0.76 (0.56-1.04), P=0.085
+     MR-Egger    OR 0.31 (0.12-0.80), P=0.051; intercept 0.1003 (P=0.084)
+  -- 7 public SNPs only: 7 instruments
+     IVW fixed   OR 0.90 (0.63-1.27), P=0.54   | Cochran Q=13.7 df=6 P=0.033
+     IVW mult-RE OR 0.90 (0.53-1.51), P=0.68
+     W. median   OR 0.92 (0.59-1.44), P=0.72
+     MR-Egger    OR 0.22 (0.05-1.01), P=0.11; intercept 0.1262 (P=0.12)
+
+== Replication scorecard (OR per 1 kb TL; 8 instruments as in the paper) ==
+outcome     method  published                   replicated                  dir  sig  pub OR in our CI
+lung_all    ivw     1.39 (1.21-1.60) P=4e-06    1.42 (1.27-1.59) P=1e-09    Y    Y    Y
+lung_all    wm      1.37 (1.12-1.67) P=0.002    1.41 (1.22-1.64) P=6e-06    Y    Y    Y
+lung_adeno  ivw     1.83 (1.51-2.22) P=5e-10    1.88 (1.62-2.17) P=5e-17    Y    Y    Y
+lung_adeno  wm      1.63 (1.23-2.16) P=0.0006   1.72 (1.41-2.12) P=2e-07    Y    Y    Y
+lung_squam  ivw     1.04 (0.83-1.29) P=0.7      1.02 (0.85-1.21) P=0.9      Y    Y    Y
+lung_squam  wm      1.09 (0.82-1.46) P=0.6      1.02 (0.80-1.28) P=0.9      Y    Y    Y
+hnc         ivw     0.90 (0.70-1.15) P=0.4      0.80 (0.62-1.03) P=0.08     Y    Y    Y
+hnc         wm      0.71 (0.51-0.98) P=0.04     0.76 (0.56-1.04) P=0.08     Y    N    Y
