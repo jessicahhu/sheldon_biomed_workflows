@@ -52,6 +52,19 @@ def weighted_median(bx, by, sy, nboot=2000):
     return est, se, 2 * stats.norm.sf(abs(est / se))
 
 
+def max_likelihood(bx, sx, by, sy):
+    """Two-sample ML estimator (Burgess 2013; TwoSampleMR mr_two_sample_ml), accounting for SE of bx.
+    Profiles out the true SNP-exposure effects; SE from the observed information (no heterogeneity inflation)."""
+    from scipy import optimize
+    nll = lambda b: 0.5 * np.sum((by - b * bx) ** 2 / (sy**2 + b**2 * sx**2))
+    b0 = ivw(bx, by, sy)[0]
+    b = optimize.minimize_scalar(nll, bracket=(b0 - 1, b0, b0 + 1)).x
+    h = 1e-4 * max(1.0, abs(b))
+    d2 = (nll(b + h) - 2 * nll(b) + nll(b - h)) / h**2
+    se = 1 / np.sqrt(d2)
+    return b, se, 2 * stats.norm.sf(abs(b / se))
+
+
 def se_from_p(beta, p):
     return np.abs(beta) / stats.norm.isf(np.asarray(p) / 2)
 
