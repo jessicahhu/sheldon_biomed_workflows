@@ -4,7 +4,7 @@ Can an LLM agent, given only a research question and public data, reach the answ
 
 - **Workflow:** two-sample summary-data Mendelian randomization (MR), written as a 10-stage procedure in [`blind_agent/workflows/mr.md`](blind_agent/workflows/mr.md).
 - **Evaluation:** questions from published MR papers that use public GWAS data. The agent never sees the paper. Answers are scored on direction, significance and effect size.
-- **Comparison:** the same agent and questions, with and without the workflow.
+- **Comparison:** the same agent and questions, with and without the workflow, for a stronger and a weaker model (Claude Sonnet 5, Claude Haiku).
 - **Course context:** CS224V project, building on SHELDON. The target is 20–30 questions; 2 are done so far and a third (a 2026 paper) is being replicated.
 
 ## Evaluation questions
@@ -19,7 +19,21 @@ For papers 1–2, the exposure (telomere-length SNP effects) comes from Zhang 20
 
 ## Results
 
-All values are odds ratios per 1 kb longer telomere length (95% CI). Agent = Claude Sonnet 5, baseline (no workflow). Each paper has two completed baseline runs; both paper 1 runs gave identical numbers.
+### Scoreboard
+
+Main outcomes only (paper 1: 3, paper 2: 4), 2 runs per paper = 14 estimates per model. Significance is P<0.05, matching the target.
+
+| Model | Condition | Direction | Significance | Where it went wrong |
+|---|---|---|---|---|
+| Claude Sonnet 5 | Baseline | 13/14 | 14/14 | Harmonisation: palindromic SNP, invented proxy (1 run) |
+| Claude Haiku | Baseline | 14/14 | 10/14 | Estimation: wrong IVW standard error (3 of 4 runs) |
+| Either | With workflow | *pending* | *pending* | |
+
+All runs passed the contamination check (see [below](#contamination-check)).
+
+### Claude Sonnet 5 (baseline, 2026-11-17)
+
+All values are odds ratios per 1 kb longer telomere length (95% CI). Both paper 1 runs gave identical numbers, so paper 1 shows one Agent column.
 
 **Paper 1: Zhang 2015**
 
@@ -41,22 +55,45 @@ All values are odds ratios per 1 kb longer telomere length (95% CI). Agent = Cla
 
 Run 1 used fixed-effect IVW with 8 instruments; run 2 used random-effects IVW with 7 (lung) and 6 (head-and-neck) instruments, which is why its intervals are wider. A third paper 2 run (`112033`) was stopped by hand and isn't scored.
 
-**Score so far (main outcomes, 2 runs per paper = 14 estimates):** direction 13/14, significance 14/14. Head-and-neck direction is right in 1 of 2 runs, so the baseline is *inconsistent* rather than reliably wrong. With the workflow: *pending*. To compare conditions fairly, run each one several times and report how often it gets each outcome right.
+**Score:** direction 13/14, significance 14/14. Head-and-neck direction is right in 1 of 2 runs, so the baseline is *inconsistent* rather than reliably wrong. To compare conditions fairly, run each one several times and report how often it gets each outcome right.
 
-**Baseline agent errors.** All were in instrument selection and harmonisation (stages 3, 5, 6); the statistics were right.
+**Sonnet's errors.** All were in instrument selection and harmonisation (stages 3, 5, 6); the statistics were right.
 - **Kept correlated SNPs** in every run. Zhang dropped 2 for LD; the agent kept all 11 in its primary estimate (paper 1 ran a TERT-excluded check, but only as a sensitivity analysis).
 - **Matched palindromic SNP PXK (A/T) on letters, not allele frequency** (paper 2, run 1). It is strand-flipped in the head-and-neck files. Run 2 compared frequencies (0.05 vs 0.95) and corrected it.
 - **Invented a proxy SNP** by physical proximity, which counted the ZNF676 locus twice (paper 2, run 1). Run 2 recognised `rs1277401554` as the same position as `rs412658` and used it as a substitute instead.
 
 In run 1, the last two flip the head-and-neck result: 1.31 → 1.04 after fixing PXK → 0.90 after dropping the proxy. The workflow adds explicit rules for all three.
 
-## Contamination check (baseline runs)
+### Claude Haiku, weaker model (baseline, 2026-11-19)
 
-Did the agent recall the papers instead of analysing the data? Checked on 2026-11-18 across all four completed runs; no sign that it did.
+Same experiment: same `run_agent.py`, questions, blinded files, sandbox (no network, no paper) and leak check, with `--model claude-haiku` only. Two runs per paper. ✓/✗ = direction / significance at P<0.05 against the same targets as above.
+
+| Outcome | Target | Haiku run 1 | Haiku run 2 |
+|---|---|---|---|
+| P1 lung overall | 1.65, sig | 1.58 (1.40–1.77) ✓✓ | 1.59 (1.57–1.60) ✓✓ |
+| P1 adenocarcinoma | 2.87, sig | 3.05 (2.63–3.53) ✓✓ | 2.98 (2.94–3.01) ✓✓ |
+| P1 squamous | 1.04, null | 0.96 (0.81–1.14) ✓✓ | 0.97 (0.95–0.98), **P=1e-6** ✓✗ |
+| P2 lung overall | 1.47, sig | 1.50 (1.48–1.51) ✓✓ | same as run 1 |
+| P2 adenocarcinoma | 2.15, sig | 2.22 (2.18–2.25) ✓✓ | same |
+| P2 squamous | 0.92, null | 0.93 (0.91–0.95), **P=5e-15** ✓✗ | same |
+| P2 head-and-neck | 0.90, null | not pooled; set A 0.95 (P=0.08), set B 0.96 (P=0.18) ✓✓ | pooled 0.96 (0.92–1.00), **P=0.03** ✓✗ |
+
+**Score:** direction 14/14, significance 10/14 (Sonnet 5: 13/14 and 14/14). The two paper 2 runs gave identical lung estimates.
+
+**Haiku's errors are statistical, not harmonisation.**
+- **Wrong IVW standard error in 3 of 4 runs.** It weighted each ratio estimate βy/βx by 1/SE_y² in place of βx²/SE_y² (paper 1 run 2 instead used SE = |βy|·SE_y/βx²). With βx ≈ 0.05–0.12 kb this makes the SE roughly 10–20× too small, so null outcomes come out "significant". Point estimates are unaffected, which is why direction is perfect.
+- **Never considered strand or palindromic SNPs** (no mention in any transcript). It matched only exact rsIDs, so it used 5 head-and-neck instruments and never used the renamed ZNF676 SNP or the TERC proxy. Avoiding proxies sidestepped Sonnet's double-counting error, partly by luck.
+- **No LD handling:** like Sonnet, it kept all 11 SNPs in paper 1.
+
+So the two models fail at different stages: Sonnet at harmonisation (stages 5–6), Haiku at estimation (stage 7). A workflow that spells out the IVW formula should help Haiku more than Sonnet.
+
+## Contamination check
+
+Did the agent recall the papers instead of analysing the data? Checked across all 8 completed baseline runs (4 Sonnet 5 on 2026-11-18, 4 Haiku on 2026-11-19); no sign that either model did.
 - **No paper-identifying text.** The transcripts never mention the authors, journals, consortia (TRICL, ILCCO, OncoArray), accession numbers, "the published study", or any published odds ratio. `run_agent.py` logs every text block the model writes (and extended thinking is off), so there is no hidden reasoning that went unchecked.
-- **Every reported number was computed.** Each OR and CI in `result.json` appears in the agent's own code output. No published value is hard-coded in its code (the only match is 1.96, the 95% z-value).
-- **Its choices don't match the papers'.** It kept the two LD-correlated SNPs Zhang dropped, and in run 1 it got head-and-neck in the wrong direction and argued a modest positive effect was missed for lack of power. A model reciting Kachuri 2019 would have reported the null.
-- **Only general knowledge.** It cited textbook facts (TERT is a pleiotropic cancer locus, the weighted-median method, Bowden 2016); gene names came from the `locus` column of the input file.
+- **Every reported number was computed.** Each OR and CI in `result.json` appears in the agent's own code output. No published value is hard-coded in its code (the only matches are 1.96, the 95% z-value, and one 0.90 that is Haiku's own computed CI bound).
+- **Its choices don't match the papers'.** Both models kept the two LD-correlated SNPs Zhang dropped. Sonnet run 1 got head-and-neck in the wrong direction and argued a modest positive effect was missed for lack of power, and Haiku called two null outcomes significant. A model reciting the papers would have reported their results.
+- **Only general knowledge.** Sonnet cited textbook facts (TERT is a pleiotropic cancer locus, the weighted-median method, Bowden 2016); gene names came from the `locus` column of the input file.
 
 **Caveats.**
 - The prompt itself gives hints ("some SNPs may be in LD", "may appear under a different rsID", "high-LD proxies"), which lowers the bar for the harmonisation steps.
@@ -93,6 +130,8 @@ blind_agent/            Runs the agent blind to the paper
    cd blind_agent
    uv run --python 3.12 --with anthropic python run_agent.py questions/paper_1.json                            # baseline
    uv run --python 3.12 --with anthropic python run_agent.py questions/paper_1.json --workflow workflows/mr.md # with workflow
+   uv run --python 3.12 --with anthropic python run_agent.py questions/paper_1.json --model claude-haiku       # other model
+   uv run --python 3.12 --with anthropic python run_agent.py --list-models                                    # models on the gateway
    ```
 
 **Output.** Each run writes to `runs/<question>/<model>_<baseline|mr>_<time>/`:
@@ -105,11 +144,13 @@ blind_agent/            Runs the agent blind to the paper
 - Its code runs in a macOS sandbox that cannot read `/Users` and has no network access.
 - A leak check aborts the run if anything sent contains author names, journals, IDs, dataset accessions or published numbers.
 
-**Caveat.** The model may still remember these papers. The code log shows whether it computed its answers itself.
+**Caveat.** The model may still remember these papers. The code log shows whether it computed its answers itself; see [Contamination check](#contamination-check).
 
 ## References
 
 - Zhang C et al. *Hum Mol Genet* 2015;24:5356. doi:10.1093/hmg/ddv252
 - Kachuri L et al. *Int J Epidemiol* 2019;48:751. doi:10.1093/ije/dyy140
+- Wang H et al. *Naunyn-Schmiedebergs Arch Pharmacol* 2026;399:9871. doi:10.1007/s00210-025-04967-2
 - McKay JD et al. *Nat Genet* 2017 (lung GWAS)
+- Sakaue S et al. *Nat Genet* 2021 (UK Biobank medication-use GWAS used by Wang 2026)
 - Joshi, Shethia, Lam. *Sheldon: Reasoning through Dual Search over Hypotheses and Observation Spaces* (submitted)
