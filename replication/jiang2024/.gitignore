@@ -1,0 +1,5 @@
+# Large downloads; rebuild with scripts/fetch_*.
+data/raw/ieu-b-4879.vcf.gz*
+data/ld_ref/
+tools/
+results/clump/

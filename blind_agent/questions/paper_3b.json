@@ -1,0 +1,94 @@
+{
+  "id": "paper_3b",
+  "source_paper": "Jiang et al. 2024, Cancer Res Commun (never sent to the agent; see replication/jiang2024/paper_card.md). Reverse direction.",
+  "question": "Does genetic liability to haematologic malignancies causally affect leukocyte telomere length? Analyse each of the 17 malignancies provided. Report each effect as exp(beta), where beta is the change in telomere length (SD) per unit increase in log-odds of the malignancy; put this value in the 'or' field of the final JSON.",
+  "files": {
+    "exposure_any_lymphoid_or_haematopoietic_malignancy.tsv": {
+      "from": "../../replication/jiang2024/data/agent/reverse/exposure_any_lymphoid_or_haematopoietic_malignancy.tsv"
+    },
+    "exposure_acute_myeloid_leukaemia.tsv": {
+      "from": "../../replication/jiang2024/data/agent/reverse/exposure_acute_myeloid_leukaemia.tsv"
+    },
+    "exposure_chronic_myeloid_leukaemia.tsv": {
+      "from": "../../replication/jiang2024/data/agent/reverse/exposure_chronic_myeloid_leukaemia.tsv"
+    },
+    "exposure_acute_lymphoblastic_leukaemia.tsv": {
+      "from": "../../replication/jiang2024/data/agent/reverse/exposure_acute_lymphoblastic_leukaemia.tsv"
+    },
+    "exposure_chronic_lymphocytic_leukaemia.tsv": {
+      "from": "../../replication/jiang2024/data/agent/reverse/exposure_chronic_lymphocytic_leukaemia.tsv"
+    },
+    "exposure_leukaemia_unspecified_cell_type.tsv": {
+      "from": "../../replication/jiang2024/data/agent/reverse/exposure_leukaemia_unspecified_cell_type.tsv"
+    },
+    "exposure_multiple_myeloma.tsv": {
+      "from": "../../replication/jiang2024/data/agent/reverse/exposure_multiple_myeloma.tsv"
+    },
+    "exposure_non_hodgkin_lymphoma.tsv": {
+      "from": "../../replication/jiang2024/data/agent/reverse/exposure_non_hodgkin_lymphoma.tsv"
+    },
+    "exposure_hodgkin_lymphoma.tsv": {
+      "from": "../../replication/jiang2024/data/agent/reverse/exposure_hodgkin_lymphoma.tsv"
+    },
+    "exposure_nhl_follicular.tsv": {
+      "from": "../../replication/jiang2024/data/agent/reverse/exposure_nhl_follicular.tsv"
+    },
+    "exposure_nhl_non_follicular.tsv": {
+      "from": "../../replication/jiang2024/data/agent/reverse/exposure_nhl_non_follicular.tsv"
+    },
+    "exposure_nhl_diffuse_large_b_cell.tsv": {
+      "from": "../../replication/jiang2024/data/agent/reverse/exposure_nhl_diffuse_large_b_cell.tsv"
+    },
+    "exposure_nhl_lymphoplasmacytic.tsv": {
+      "from": "../../replication/jiang2024/data/agent/reverse/exposure_nhl_lymphoplasmacytic.tsv"
+    },
+    "exposure_nhl_mantle_cell.tsv": {
+      "from": "../../replication/jiang2024/data/agent/reverse/exposure_nhl_mantle_cell.tsv"
+    },
+    "exposure_nhl_marginal_zone.tsv": {
+      "from": "../../replication/jiang2024/data/agent/reverse/exposure_nhl_marginal_zone.tsv"
+    },
+    "exposure_nhl_mature_t_nk.tsv": {
+      "from": "../../replication/jiang2024/data/agent/reverse/exposure_nhl_mature_t_nk.tsv"
+    },
+    "exposure_nhl_other_unspecified.tsv": {
+      "from": "../../replication/jiang2024/data/agent/reverse/exposure_nhl_other_unspecified.tsv"
+    },
+    "outcome_telomere_length.tsv": {
+      "from": "../../replication/jiang2024/data/agent/reverse/outcome_telomere_length.tsv"
+    },
+    "ld_reference_genotypes.tsv": {
+      "from": "../../replication/jiang2024/data/agent/reverse/ld_reference_genotypes.tsv"
+    }
+  },
+  "data_description": "exposure_*.tsv: case-control GWAS of haematologic malignancies in a European-ancestry population cohort (controls exclude all cancer cases), restricted to variants with p < 1e-5. columns: chr, pos_b38 (GRCh38), snp (rsID; occasionally several, comma-separated), other_allele, effect_allele, eaf (effect allele frequency), beta (log-odds per effect allele), se, p. These are raw association results, not independent signals.\n  - any primary malignancy of lymphoid, haematopoietic and related tissue: 7,519 cases / 299,952 controls\n  - acute myeloid leukaemia: 231 cases / 287,136 controls\n  - chronic myeloid leukaemia: 232 cases / 375,158 controls\n  - acute lymphoblastic leukaemia: 184 cases / 287,136 controls\n  - chronic lymphocytic leukaemia: 624 cases / 287,133 controls\n  - leukaemia of unspecified cell type: 220 cases / 299,952 controls\n  - multiple myeloma: 1,249 cases / 299,952 controls\n  - non-Hodgkin lymphoma (all): 928 cases / 287,137 controls\n  - Hodgkin lymphoma: 780 cases / 299,952 controls\n  - follicular lymphoma: 1,081 cases / 299,952 controls\n  - non-follicular lymphoma: 2,602 cases / 299,952 controls\n  - diffuse large B-cell lymphoma: 1,010 cases / 287,137 controls\n  - lymphoplasmacytic lymphoma / Waldenström macroglobulinaemia: 87 cases / 287,137 controls\n  - mantle cell lymphoma: 199 cases / 287,137 controls\n  - marginal zone B-cell lymphoma: 192 cases / 287,137 controls\n  - mature T/NK-cell lymphoma: 335 cases / 299,952 controls\n  - other and unspecified non-Hodgkin lymphoma: 1,088 cases / 299,952 controls\noutcome_telomere_length.tsv: a genome-wide association study of leukocyte telomere length in ~470,000 European-ancestry adults (log-transformed, standardised; beta in SD per effect allele), restricted to the variants in the exposure files. Columns: chr, pos_b37 (GRCh37), snp, other_allele, effect_allele, eaf, beta, se, p. Some exposure variants are missing.\nld_reference_genotypes.tsv: genotypes of 503 European-ancestry reference individuals (1000 Genomes) for every listed variant present in the reference panel. Columns: snp, chr, pos (GRCh37), a1, a2, genotypes. `genotypes` is a string with one character per individual (same individual order on every row): the count of a1 (0, 1 or 2), or 9 if missing. Use it to estimate linkage disequilibrium (LD) between variants. Variants absent from the reference panel have no row.",
+  "blocked_terms": [
+    "jiang",
+    "\\bcao\\b",
+    "\\bqiu\\b",
+    "\\bfeng\\b",
+    "shandong",
+    "cancer\\s*res",
+    "CRC-24",
+    "2767-9764",
+    "finn\\s*gen",
+    "\\bR9\\b",
+    "open\\s*gwas",
+    "ieu-[ab]",
+    "mrcieu",
+    "\\bcodd\\b",
+    "UK\\s*Biobank",
+    "\\bUKB\\b",
+    "\\b2\\.690\\b",
+    "\\b2\\.155\\b",
+    "\\b1\\.845\\b",
+    "\\b1\\.697\\b",
+    "\\b1\\.737\\b",
+    "\\b1\\.651\\b",
+    "\\b2\\.779\\b",
+    "\\b8\\.940\\b",
+    "\\b2\\.874\\b",
+    "\\b1\\.603\\b",
+    "\\b1\\.599\\b"
+  ]
+}

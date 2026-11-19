@@ -1,0 +1,42 @@
+TL: 37958 variants p<5e-8 -> 150 clumped instruments (r2<0.001, 10 Mb, 1000G EUR)
+  of which chrX: 0; min F = 29.9
+
+== Forward: TL (per SD) -> cancer, OR ==
+lymphoid_haem_all  n=138  IVW 1.484 (1.256-1.754) p=3.41e-06  WM 1.773 (1.420-2.213)  Egger 1.603 (1.188-2.162)  Qp=0.000 int_p=0.546  [missing=8, outcome p<5e-8=1, palindromic, MAF>0.42=3]
+aml                n=139  IVW 1.949 (0.914-4.155) p=0.084  WM 2.486 (0.703-8.784)  Egger 1.800 (0.476-6.805)  Qp=0.029 int_p=0.886  [missing=8, palindromic, MAF>0.42=3]
+cml                n=139  IVW 1.293 (0.634-2.639) p=0.479  WM 1.573 (0.517-4.790)  Egger 0.979 (0.280-3.427)  Qp=0.209 int_p=0.597  [missing=8, palindromic, MAF>0.42=3]
+all                n=139  IVW 2.644 (1.228-5.694) p=0.013  WM 2.214 (0.646-7.585)  Egger 6.382 (1.665-24.461)  Qp=0.758 int_p=0.120  [missing=8, palindromic, MAF>0.42=3]
+cll                n=139  IVW 3.635 (2.396-5.513) p=1.27e-09  WM 4.915 (2.407-10.036)  Egger 7.304 (3.520-15.154)  Qp=0.661 int_p=0.024  [missing=8, palindromic, MAF>0.42=3]
+leuk_unspec        n=139  IVW 2.104 (1.049-4.222) p=0.0362  WM 1.927 (0.542-6.846)  Egger 2.099 (0.620-7.104)  Qp=0.737 int_p=0.996  [missing=8, palindromic, MAF>0.42=3]
+myeloma            n=139  IVW 1.700 (1.215-2.378) p=0.00197  WM 3.105 (1.886-5.112)  Egger 2.655 (1.479-4.768)  Qp=0.013 int_p=0.071  [missing=8, palindromic, MAF>0.42=3]
+nhl                n=139  IVW 1.734 (1.197-2.512) p=0.00363  WM 2.402 (1.319-4.374)  Egger 1.919 (0.999-3.687)  Qp=0.091 int_p=0.711  [missing=8, palindromic, MAF>0.42=3]
+hodgkin            n=139  IVW 1.738 (1.192-2.533) p=0.00407  WM 1.439 (0.795-2.606)  Egger 1.517 (0.782-2.945)  Qp=0.415 int_p=0.627  [missing=8, palindromic, MAF>0.42=3]
+follicular         n=139  IVW 1.082 (0.728-1.608) p=0.696  WM 1.422 (0.846-2.391)  Egger 0.838 (0.418-1.680)  Qp=0.000 int_p=0.382  [missing=8, palindromic, MAF>0.42=3]
+nonfollicular      n=139  IVW 1.595 (1.275-1.994) p=4.35e-05  WM 1.752 (1.243-2.470)  Egger 1.612 (1.087-2.391)  Qp=0.074 int_p=0.947  [missing=8, palindromic, MAF>0.42=3]
+dlbcl              n=139  IVW 1.464 (1.038-2.066) p=0.0299  WM 1.267 (0.757-2.121)  Egger 1.556 (0.849-2.851)  Qp=0.205 int_p=0.812  [missing=8, palindromic, MAF>0.42=3]
+waldenstrom        n=139  IVW 12.091 (3.470-42.125) p=9.09e-05  WM 16.332 (2.613-102.089)  Egger 12.633 (1.404-113.648)  Qp=0.017 int_p=0.962  [missing=8, palindromic, MAF>0.42=3]
+mantle             n=139  IVW 3.571 (1.707-7.471) p=0.000728  WM 3.362 (0.986-11.465)  Egger 1.762 (0.483-6.430)  Qp=0.653 int_p=0.195  [missing=8, palindromic, MAF>0.42=3]
+marginal_zone      n=139  IVW 1.180 (0.546-2.547) p=0.674  WM 2.332 (0.699-7.779)  Egger 1.593 (0.411-6.174)  Qp=0.328 int_p=0.597  [missing=8, palindromic, MAF>0.42=3]
+t_nk               n=139  IVW 0.712 (0.400-1.267) p=0.248  WM 1.395 (0.553-3.518)  Egger 1.376 (0.504-3.759)  Qp=0.404 int_p=0.120  [missing=8, palindromic, MAF>0.42=3]
+nhl_other          n=139  IVW 1.707 (1.244-2.344) p=0.000938  WM 1.449 (0.879-2.389)  Egger 1.411 (0.809-2.461)  Qp=0.731 int_p=0.415  [missing=8, palindromic, MAF>0.42=3]
+
+== Reverse: cancer (per log-odds) -> TL (SD), exp(beta) ==
+lymphoid_haem_all  clumped= 40 n= 31  IVW 1.005 (0.993-1.017) p=0.426  WM 0.999 (0.986-1.011)  [missing in TL=4, TL p<5e-8=5]
+aml                clumped=  9 n=  9  IVW 1.000 (0.996-1.004) p=0.992  WM 0.998 (0.994-1.003)  []
+cml                clumped=  4 n=  4  IVW 1.002 (0.995-1.009) p=0.606  WM 1.002 (0.994-1.010)  []
+all                clumped=  7 n=  6  IVW 0.999 (0.995-1.004) p=0.713  WM 0.997 (0.992-1.003)  [missing in TL=1]
+cll                clumped= 41 n= 35  IVW 1.000 (0.997-1.004) p=0.914  WM 1.000 (0.996-1.004)  [missing in TL=4, TL p<5e-8=1, allele mismatch=1]
+leuk_unspec        clumped=  5 n=  4  IVW 1.000 (0.996-1.005) p=0.857  WM 1.002 (0.996-1.007)  [allele mismatch=1]
+myeloma            clumped= 25 n= 23  IVW 0.995 (0.989-1.001) p=0.133  WM 0.998 (0.991-1.004)  [missing in TL=1, palindromic allele mismatch=1]
+nhl                clumped= 17 n= 16  IVW 0.996 (0.991-1.000) p=0.0476  WM 0.993 (0.988-0.997)  [missing in TL=1]
+hodgkin            clumped= 18 n= 16  IVW 1.001 (0.995-1.007) p=0.792  WM 1.003 (0.998-1.009)  [missing in TL=2]
+follicular         clumped= 28 n= 23  IVW 1.000 (0.996-1.004) p=0.867  WM 0.999 (0.994-1.003)  [missing in TL=3, TL p<5e-8=1, allele mismatch=1]
+nonfollicular      clumped= 24 n= 21  IVW 0.992 (0.984-1.001) p=0.0679  WM 1.000 (0.991-1.009)  [missing in TL=3]
+dlbcl              clumped= 13 n= 12  IVW 0.994 (0.987-1.002) p=0.153  WM 0.993 (0.986-1.001)  [TL p<5e-8=1]
+waldenstrom        clumped=1 usable=1 -> not estimable  [{'missing in TL': 0, 'TL p<5e-8': 0}]
+mantle             clumped=  5 n=  5  IVW 0.999 (0.995-1.003) p=0.586  WM 1.000 (0.996-1.005)  []
+marginal_zone      clumped=  7 n=  6  IVW 0.999 (0.995-1.004) p=0.797  WM 0.998 (0.993-1.003)  [TL p<5e-8=1]
+t_nk               clumped=  8 n=  5  IVW 0.999 (0.994-1.005) p=0.785  WM 1.000 (0.994-1.007)  [missing in TL=2, allele mismatch=1]
+nhl_other          clumped= 17 n= 14  IVW 0.999 (0.994-1.004) p=0.661  WM 0.998 (0.992-1.004)  [missing in TL=1, TL p<5e-8=1, palindromic, MAF>0.42=1]
+
+Wrote /Users/abigaillee/Documents/cs224v/sheldon_biomed_workflows-main/replication/jiang2024/results/mr_results.tsv
