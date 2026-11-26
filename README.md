@@ -5,6 +5,7 @@ Can an LLM agent, given only a research question and public data, reach the answ
 - **Workflow:** two-sample summary-data Mendelian randomization (MR), written as a 10-stage procedure in [`blind_agent/workflows/mr.md`](blind_agent/workflows/mr.md).
 - **Evaluation:** questions from published MR papers that use public GWAS data. The agent never sees the paper. Answers are scored on direction, significance and effect size.
 - **Comparison:** the same agent and questions, with and without the workflow, for a stronger and a weaker model (Claude Sonnet 5, Claude Haiku).
+- **Two-agent variant:** a Haiku researcher whose every step is reviewed by a second Haiku checker ([`multi_agent_reasoning/`](multi_agent_reasoning/)).
 - **Course context:** CS224V project, building on SHELDON. The target is 20–30 questions; 2 are done so far and a third (a 2026 paper) is being replicated.
 
 ## Evaluation questions
@@ -27,6 +28,7 @@ Main outcomes only (paper 1: 3, paper 2: 4), 2 runs per paper = 14 estimates per
 |---|---|---|---|---|
 | Claude Sonnet 5 | Baseline | 13/14 | 14/14 | Harmonisation: palindromic SNP, invented proxy (1 run) |
 | Claude Haiku | Baseline | 14/14 | 10/14 | Estimation: wrong IVW standard error (3 of 4 runs) |
+| Claude Haiku ×2 | Researcher + checker | 22/28 | 26/28 | Harmonisation: head-and-neck direction wrong in every run (see [below](#two-agent-system-haiku-researcher--haiku-checker-2026-11-26)) |
 | Either | With workflow | *pending* | *pending* | |
 
 All runs passed the contamination check (see [below](#contamination-check)).
@@ -87,6 +89,64 @@ Same experiment: same `run_agent.py`, questions, blinded files, sandbox (no netw
 
 So the two models fail at different stages: Sonnet at harmonisation (stages 5–6), Haiku at estimation (stage 7). A workflow that spells out the IVW formula should help Haiku more than Sonnet.
 
+### Two-agent system: Haiku researcher + Haiku checker (2026-11-26)
+
+Can a second model catch the first one's mistakes as they happen? Both agents are Claude Haiku.
+- **Researcher:** the baseline set-up, unchanged: the same question, blinded files, sandbox (no network, no paper) and leak check. One added paragraph tells it a reviewer will comment on its work.
+- **Checker:** gets the question and data description, but no files, no tools and no internet. After every researcher turn it sees that turn's narration, code and output, and replies `VERDICT: OK` or `VERDICT: CONCERN` with reasons. The reply goes back to the researcher with the tool results. It also reviews the final report, and on a concern it can ask for up to 2 revisions. Like the researcher, it is told not to use remembered published results.
+
+There were 8 runs, 4 per paper, so 28 estimates. They were scored by [`multi_agent_reasoning/score.py`](multi_agent_reasoning/score.py), which uses the same targets as above and reproduces the Haiku baseline's 14/14 and 10/14 exactly.
+
+| Haiku set-up | Runs | Direction | Significance | Runs with every outcome right |
+|---|---|---|---|---|
+| Single agent (baseline) | 4 | 14/14 (100%) | 10/14 (71%) | 1/4 |
+| Researcher + checker | 8 | 22/28 (79%) | 26/28 (93%) | 2/8 |
+
+All values are odds ratios per 1 kb (95% CI). ✓/✗ = direction / significance.
+
+| Outcome | Target | `111840` | `4246` | `4247` | `4333` |
+|---|---|---|---|---|---|
+| P1 lung overall | 1.43, sig | 1.43 (1.41–1.72) ✓✓ | 1.58 (1.40–1.77) ✓✓ | 1.65 (1.43–1.91) ✓✓ | 1.56 (1.38–1.77) ✓✓ |
+| P1 adenocarcinoma | 2.75, sig | 2.08 (1.97–6.91) ✓✓ | 3.05 (2.63–3.53) ✓✓ | 3.08 (2.56–3.70) ✓✓ | 3.03 (2.60–3.54) ✓✓ |
+| P1 squamous | 0.96, null | 1.01 (0.82–1.06) ✗✓ | 0.96 (0.81–1.14) ✓✓ | 1.02 (0.82–1.26) ✗✓ | 0.96 (0.81–1.14) ✓✓ |
+
+| Outcome | Target | `111841` | `111843` | `4248` | `4249` |
+|---|---|---|---|---|---|
+| P2 lung overall | 1.47, sig | 1.27 (1.26–1.27) ✓✓ | 1.45 (1.28–1.66) ✓✓ | 1.44 (1.25–1.67) ✓✓ | 1.41 (1.21–1.65) ✓✓ |
+| P2 adenocarcinoma | 2.15, sig | 1.66 (1.64–1.68) ✓✓ | 2.09 (1.75–2.50) ✓✓ | 2.00 (1.63–2.46) ✓✓ | 2.01 (1.42–2.83) ✓✓ |
+| P2 squamous | 0.92, null | 0.86 (0.86–0.87), **P≈0** ✓✗ | 0.98 (0.80–1.21) ✓✓ | 0.92 (0.74–1.15) ✓✓ | 0.93 (0.82–1.06) ✓✓ |
+| P2 head-and-neck | 0.90, null | **not reported** ✗✗ | A 1.15, B 1.03, null ✗✓ | A 1.17, B 1.10, null ✗✓ | pooled 1.09 (0.64–1.88) ✗✓ |
+
+`111840` reported the weighted median as its primary method rather than IVW. Its asymmetric intervals are bootstrapped.
+
+**The checker fixed Haiku's statistical error.** The wrong IVW standard error survived into the final answer in only 1 of 8 runs (`111841`, with its very narrow intervals), against 3 of 4 in the baseline. In at least two runs (`4247`, `4333`) the checker objected at the IVW step and the researcher rewrote the formula, so null lung outcomes now come out null.
+
+**But the direction got worse, at harmonisation.**
+- **Head-and-neck went the wrong way in all 4 paper 2 runs.** Three runs reported an OR above 1 where the target is 0.90; `111841` left it out altogether.
+  - The likely cause is rs6772228, an A/T palindromic SNP and the head-and-neck instrument with the largest exposure effect (0.12 kb).
+  - Flipping it by allele labels alone gives the opposite sign from our replication, which aligns it the other way.
+  - In `4248` the checker told the researcher to flip it by its labels and never mentioned that it is palindromic. Neither agent ever handled palindromic SNPs.
+  - This is the failure Sonnet showed in the baseline, and here the checker made it more likely. I haven't traced every run, so this cause is probable, not confirmed.
+- **The two paper 1 squamous "direction" misses are not real errors.** The ORs are 1.01 and 1.02 (P≈0.85). The published value is 1.04 and our replication is 0.96, so the direction rule is fragile for a null this close to 1.
+
+**How the agents interacted:**
+- The checker objected on 4–11 of the 15–28 reviews in each run (25–50%).
+- It approved every final report, so no run used a revision. That includes `111841`, which left out an outcome the question asked for. One approval called the report "ready for peer review or publication".
+- So the checker is useful while the work is being done and adds nothing at the final review.
+- One run (`4247`) clumped correlated SNPs down to 8 instruments, the first run in either condition to handle LD.
+
+**Caveats:**
+- This is a small sample (8 runs against 4).
+- Paper 1 has 4 runs rather than 2 because some runs were relaunched.
+- A run takes about twice as many model calls as the baseline, about 5–10 minutes.
+
+**Contamination.** The same check as below was run on all 8 transcripts and checker logs. There are no author, journal, consortium or accession mentions, and no reference to a published study. `4247`'s lung OR of 1.65 equals the published value, but its own IVW on 8 LD-clumped SNPs printed 1.6529 (1.4301–1.9103) before the number appears anywhere in its text.
+
+**Next steps:**
+- Tell the checker to look specifically for palindromic and strand-ambiguous SNPs.
+- Make its final-report review check that every outcome the question asks for is present.
+- Run the same two-agent set-up with the workflow.
+
 ## Contamination check
 
 Did the agent recall the papers instead of analysing the data? Checked across all 8 completed baseline runs (4 Sonnet 5 on 2026-11-18, 4 Haiku on 2026-11-19); no sign that either model did.
@@ -115,6 +175,10 @@ blind_agent/            Runs the agent blind to the paper
   questions/              paper_1.json, paper_2.json (question + data; paper never sent)
   workflows/mr.md         The workflow
   runs/                   Agent outputs (git-ignored)
+multi_agent_reasoning/  Researcher + checker system (reuses blind_agent's sandbox and blinding)
+  run_multi_agent.py
+  score.py                Scores any run's result.json against the scoreboard targets
+  runs/                   Outputs, incl. checker_reviews.json (git-ignored)
 ```
 
 ## Running the agent
@@ -143,6 +207,14 @@ blind_agent/            Runs the agent blind to the paper
 **Blinding.** The agent only sees the question and renamed data files with paper-identifying columns removed.
 - Its code runs in a macOS sandbox that cannot read `/Users` and has no network access.
 - A leak check aborts the run if anything sent contains author names, journals, IDs, dataset accessions or published numbers.
+
+**Two-agent system.** This uses the same `.env`. Run it from the repo root:
+```bash
+uv run --python 3.12 --with anthropic python multi_agent_reasoning/run_multi_agent.py blind_agent/questions/paper_1.json
+#   --researcher-model / --checker-model   (both default to claude-haiku)
+python3 multi_agent_reasoning/score.py multi_agent_reasoning/runs/paper_*/*   # or blind_agent/runs/paper_*/*
+```
+Each run writes the same files as above, plus `checker_reviews.json` with every verdict. Its `transcript.md` shows the checker's reviews between the researcher's steps.
 
 **Caveat.** The model may still remember these papers. The code log shows whether it computed its answers itself; see [Contamination check](#contamination-check).
 
