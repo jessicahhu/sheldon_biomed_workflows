@@ -1,6 +1,7 @@
 """Score result.json files against the targets used in the README scoreboard.
 
 Direction: OR on the same side of 1 as our hand replication. Significance: P<0.05 agrees with the target.
+Paper 3 (Wang 2026) is scored against the published IVW results.
 Head-and-neck (paper 2): a pooled/meta estimate is scored if the agent gave one; otherwise the separate
 set A / set B estimates are scored together (both must be right), as in the README.
 
@@ -13,11 +14,18 @@ from pathlib import Path
 TARGETS = {
     "paper_1": {"lung_all": (1.43, True), "adeno": (2.75, True), "squam": (0.96, False)},
     "paper_2": {"lung_all": (1.47, True), "adeno": (2.15, True), "squam": (0.92, False), "hnc": (0.90, False)},
+    # Wang 2026 Table S2, IVW (published values; see replication/wang2026/paper_card.md)
+    "paper_3": {"salicylic": (0.779, True), "opioids": (1.160, True), "antithrombotic": (0.780, True),
+                "thyroid": (0.940, True), "statins": (0.950, False), "diabetes": (0.971, False)},
 }
+DRUG_WORDS = {"salicylic": ("salicyl", "aspirin"), "opioids": ("opioid",), "antithrombotic": ("antithromb",),
+              "thyroid": ("thyroid",), "statins": ("hmg", "statin"), "diabetes": ("diabet",)}
 
 
-def key(name):
+def key(name, qid):
     n = name.lower()
+    if qid == "paper_3":
+        return next((k for k, ws in DRUG_WORDS.items() if any(w in n for w in ws)), None)
     if any(w in n for w in ("head", "neck", "oral", "pharyn", "hnc")):
         if any(w in n for w in ("pool", "meta", "combined")):
             return "hnc"
@@ -44,7 +52,7 @@ def score_run(run_dir):
     except (FileNotFoundError, json.JSONDecodeError):
         res = []
     for r in res:
-        k = key(str(r.get("outcome", "")))
+        k = key(str(r.get("outcome", "")), qid)
         if k and k not in rows:  # first estimate per outcome = primary
             rows[k] = r
     if "hnc" not in rows and "hnc_a" in rows and "hnc_b" in rows:

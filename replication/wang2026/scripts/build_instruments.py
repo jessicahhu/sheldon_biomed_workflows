@@ -14,7 +14,7 @@ Usage: python3 build_instruments.py <exposure_dir> <ld_dir> <out_dir>
 import sys, os, json, subprocess, urllib.request, time
 import numpy as np, pandas as pd
 
-exp_dir, ld_dir, out_dir = sys.argv[1:4]
+exp_dir, ld_dir, out_dir = (os.path.abspath(a) for a in sys.argv[1:4])  # absolute: bcftools runs with cwd=cache_dir
 DRUGS = {  # GWAS Catalog accession -> name (Wang 2026 Table S1)
     "GCST90018995": "salicylic_acid", "GCST90018994": "opioids", "GCST90018982": "antithrombotic",
     "GCST90018990": "thyroid", "GCST90018989": "statins", "GCST90018981": "diabetes_drugs",
