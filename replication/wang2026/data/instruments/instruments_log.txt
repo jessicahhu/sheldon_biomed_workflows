@@ -1,0 +1,7 @@
+salicylic_acid (GCST90018995) P<5e-08: 1831 SNPs, 1781 mapped to GRCh37, 1253 in 1000G EUR (MAF>=0.01), 22 after clumping r2<0.001/10000kb and F>10
+opioids (GCST90018994) P<5e-08: 181 SNPs, 181 mapped to GRCh37, 180 in 1000G EUR (MAF>=0.01), 2 after clumping r2<0.001/10000kb and F>10
+opioids (GCST90018994) P<5e-06: 926 SNPs, 926 mapped to GRCh37, 896 in 1000G EUR (MAF>=0.01), 46 after clumping r2<0.001/10000kb and F>10
+antithrombotic (GCST90018982) P<5e-08: 1860 SNPs, 1807 mapped to GRCh37, 1409 in 1000G EUR (MAF>=0.01), 29 after clumping r2<0.001/10000kb and F>10
+thyroid (GCST90018990) P<5e-08: 22013 SNPs, 21985 mapped to GRCh37, 21446 in 1000G EUR (MAF>=0.01), 120 after clumping r2<0.001/10000kb and F>10
+statins (GCST90018989) P<5e-08: 14857 SNPs, 14680 mapped to GRCh37, 12633 in 1000G EUR (MAF>=0.01), 104 after clumping r2<0.001/10000kb and F>10
+diabetes_drugs (GCST90018981) P<5e-08: 10300 SNPs, 10245 mapped to GRCh37, 9518 in 1000G EUR (MAF>=0.01), 118 after clumping r2<0.001/10000kb and F>10

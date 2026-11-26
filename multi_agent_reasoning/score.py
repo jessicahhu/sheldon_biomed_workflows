@@ -52,7 +52,9 @@ def score_run(run_dir):
     except (FileNotFoundError, json.JSONDecodeError):
         res = []
     for r in res:
-        k = key(str(r.get("outcome", "")), qid)
+        # paper 3: the drug may sit in any field ("outcome", "drug", "medication_class", ...)
+        name = " ".join(str(v) for v in r.values() if isinstance(v, str)) if qid == "paper_3" else str(r.get("outcome", ""))
+        k = key(name, qid)
         if k and k not in rows:  # first estimate per outcome = primary
             rows[k] = r
     if "hnc" not in rows and "hnc_a" in rows and "hnc_b" in rows:

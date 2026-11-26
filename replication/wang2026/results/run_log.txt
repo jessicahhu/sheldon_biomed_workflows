@@ -1,0 +1,120 @@
+== salicylic_acid (GCST90018995): 22 instruments (P<5e-08), 6 missing from outcome, 4 dropped at harmonisation -> 12 used (paper: 18)
+    rs74617384: palindromic T/A -> dropped
+    rs28601761: palindromic G/C -> dropped
+    rs964184: palindromic C/G -> dropped
+    rs35409574: palindromic G/C -> dropped
+   IVW    ours OR 0.850 (0.719-1.004) P=0.056   paper 0.779 (0.676-0.898) P=0.00054
+   ML     ours OR 0.847 (0.714-1.004) P=0.055   paper 0.782 (0.691-0.885) P=9.9e-05
+   WM     ours OR 0.851 (0.677-1.069) P=0.17   paper 0.786 (0.647-0.954) P=0.015
+   Egger  ours OR 0.749 (0.466-1.204) P=0.26   paper 0.707 (0.473-1.057) P=0.11
+   Q=10.4 df=11 P=0.5 (paper IVW Q P=0.11); Egger intercept 0.0077 P=0.59 (paper 0.0065 P=0.62)
+   sensitivity, keep palindromic SNPs with MAF<0.42 (TwoSampleMR default): n=15 IVW OR 0.804 (0.694-0.932) P=0.0038
+
+== opioids (GCST90018994): 46 instruments (P<5e-06), 4 missing from outcome, 8 dropped at harmonisation -> 34 used (paper: 35)
+    rs2618039: palindromic T/A -> dropped
+    rs945211: palindromic C/G -> dropped
+    rs139152977: palindromic A/T -> dropped
+    rs62479581: palindromic A/T -> dropped
+    rs13302047: palindromic G/C -> dropped
+    rs1039090: palindromic T/A -> dropped
+    rs17089391: palindromic T/A -> dropped
+    rs2297197: palindromic G/C -> dropped
+   IVW    ours OR 1.177 (1.083-1.279) P=0.00012   paper 1.160 (1.065-1.263) P=0.00064
+   ML     ours OR 1.187 (1.093-1.289) P=4.5e-05   paper 1.164 (1.074-1.262) P=0.00021
+   WM     ours OR 1.114 (0.994-1.249) P=0.064   paper 1.067 (0.940-1.212) P=0.32
+   Egger  ours OR 0.969 (0.774-1.213) P=0.78   paper 0.991 (0.781-1.258) P=0.94
+   Q=36.8 df=33 P=0.3 (paper IVW Q P=0.22); Egger intercept 0.0139 P=0.079 (paper 0.0111 P=0.18)
+   sensitivity, keep palindromic SNPs with MAF<0.42 (TwoSampleMR default): n=39 IVW OR 1.170 (1.086-1.262) P=4.1e-05
+
+== antithrombotic (GCST90018982): 29 instruments (P<5e-08), 6 missing from outcome, 2 dropped at harmonisation -> 21 used (paper: 24)
+    rs74617384: palindromic T/A -> dropped
+    rs28601761: palindromic G/C -> dropped
+   IVW    ours OR 0.768 (0.652-0.905) P=0.0017   paper 0.780 (0.656-0.927) P=0.0049
+   ML     ours OR 0.763 (0.667-0.873) P=8.3e-05   paper 0.776 (0.689-0.873) P=2.6e-05
+   WM     ours OR 0.712 (0.579-0.875) P=0.0013   paper 0.726 (0.596-0.885) P=0.0015
+   Egger  ours OR 0.750 (0.482-1.167) P=0.22   paper 0.881 (0.559-1.390) P=0.59
+   Q=31.0 df=20 P=0.055 (paper IVW Q P=0.00018); Egger intercept 0.0013 P=0.91 (paper -0.0071 P=0.57)
+   sensitivity, keep palindromic SNPs with MAF<0.42 (TwoSampleMR default): n=23 IVW OR 0.755 (0.651-0.875) P=0.00019
+
+== thyroid (GCST90018990): 120 instruments (P<5e-08), 16 missing from outcome, 18 dropped at harmonisation -> 86 used (paper: 88)
+    rs12730151: palindromic A/T -> dropped
+    rs10489626: palindromic G/C -> dropped
+    rs11264798: palindromic G/C -> dropped
+    rs7582694: palindromic G/C -> dropped
+    rs11714843: palindromic A/T -> dropped
+    rs2856698: palindromic G/C -> dropped
+    rs7754251: palindromic C/G -> dropped
+    rs2921053: palindromic C/G -> dropped
+    rs615031: palindromic T/A -> dropped
+    rs174599: palindromic C/G -> dropped
+    rs12419272: palindromic G/C -> dropped
+    rs75191394: palindromic A/T -> dropped
+    rs7195228: palindromic G/C -> dropped
+    rs13380830: palindromic G/C -> dropped
+    rs6505765: palindromic G/C -> dropped
+    rs6111715: palindromic C/G -> dropped
+    rs2823272: palindromic A/T -> dropped
+    rs713875: palindromic G/C -> dropped
+   IVW    ours OR 0.938 (0.901-0.977) P=0.0019   paper 0.940 (0.901-0.981) P=0.0048
+   ML     ours OR 0.937 (0.907-0.968) P=7.8e-05   paper 0.941 (0.911-0.972) P=0.00019
+   WM     ours OR 0.929 (0.879-0.982) P=0.0097   paper 0.932 (0.883-0.984) P=0.011
+   Egger  ours OR 0.905 (0.828-0.988) P=0.028   paper 0.915 (0.833-1.005) P=0.067
+   Q=135.0 df=85 P=0.00046 (paper IVW Q P=3.2e-06); Egger intercept 0.0036 P=0.36 (paper 0.0028 P=0.52)
+   sensitivity, keep palindromic SNPs with MAF<0.42 (TwoSampleMR default): n=100 IVW OR 0.974 (0.931-1.018) P=0.24
+
+== statins (GCST90018989): 104 instruments (P<5e-08), 14 missing from outcome, 17 dropped at harmonisation -> 73 used (paper: 76)
+    rs996253: palindromic T/A -> dropped
+    rs6732741: palindromic A/T -> dropped
+    rs3792023: palindromic T/A -> dropped
+    rs9844972: palindromic C/G -> dropped
+    rs10857147: palindromic T/A -> dropped
+    rs1501908: palindromic C/G -> dropped
+    rs74617384: palindromic T/A -> dropped
+    rs9457834: palindromic A/T -> dropped
+    rs2066905: palindromic C/G -> dropped
+    rs4476815: palindromic C/G -> dropped
+    rs11489405: palindromic G/C -> dropped
+    rs57180587: palindromic T/A -> dropped
+    rs964184: palindromic C/G -> dropped
+    rs4794047: palindromic T/A -> dropped
+    rs72631343: palindromic G/C -> dropped
+    rs2016393: palindromic C/G -> dropped
+    rs61194703: palindromic T/A -> dropped
+   IVW    ours OR 0.925 (0.859-0.996) P=0.039   paper 0.950 (0.887-1.017) P=0.14
+   ML     ours OR 0.924 (0.872-0.978) P=0.0067   paper 0.950 (0.899-1.003) P=0.066
+   WM     ours OR 0.883 (0.800-0.975) P=0.014   paper 0.886 (0.808-0.972) P=0.01
+   Egger  ours OR 0.860 (0.753-0.983) P=0.03   paper 0.890 (0.787-1.007) P=0.069
+   Q=122.2 df=72 P=0.00021 (paper IVW Q P=0.0012); Egger intercept 0.0054 P=0.2 (paper 0.0049 P=0.22)
+   sensitivity, keep palindromic SNPs with MAF<0.42 (TwoSampleMR default): n=88 IVW OR 0.925 (0.868-0.985) P=0.015
+
+== diabetes_drugs (GCST90018981): 118 instruments (P<5e-08), 10 missing from outcome, 16 dropped at harmonisation -> 92 used (paper: 95)
+    rs2293476: palindromic C/G -> dropped
+    rs2972155: palindromic G/C -> dropped
+    rs1470580: palindromic A/T -> dropped
+    rs4689394: palindromic G/C -> dropped
+    rs11947917: palindromic C/G -> dropped
+    rs116782923: palindromic T/A -> dropped
+    rs56221328: palindromic T/A -> dropped
+    rs13241165: palindromic T/A -> dropped
+    rs1575972: palindromic A/T -> dropped
+    rs11187141: palindromic T/A -> dropped
+    rs4148646: palindromic G/C -> dropped
+    rs11820002: palindromic C/G -> dropped
+    rs2583938: palindromic A/T -> dropped
+    rs8037894: palindromic C/G -> dropped
+    rs889512: palindromic G/C -> dropped
+    rs1377807: palindromic C/G -> dropped
+   IVW    ours OR 0.964 (0.923-1.007) P=0.1   paper 0.971 (0.931-1.013) P=0.17
+   ML     ours OR 0.964 (0.930-0.999) P=0.042   paper 0.971 (0.938-1.005) P=0.09
+   WM     ours OR 0.962 (0.901-1.028) P=0.25   paper 0.963 (0.902-1.028) P=0.25
+   Egger  ours OR 0.931 (0.856-1.013) P=0.1   paper 0.939 (0.865-1.020) P=0.14
+   Q=136.5 df=91 P=0.0014 (paper IVW Q P=0.00069); Egger intercept 0.0034 P=0.34 (paper 0.0032 P=0.36)
+   sensitivity, keep palindromic SNPs with MAF<0.42 (TwoSampleMR default): n=105 IVW OR 0.955 (0.918-0.994) P=0.022
+
+          drug  paper_nsnp  our_nsnp            paper_or  paper_p              our_or    our_p  direction  significance_p05  paper_or_in_our_ci
+salicylic_acid          18        12 0.779 (0.676-0.898) 0.000545 0.850 (0.719-1.004) 0.056055       True             False                True
+       opioids          35        34 1.160 (1.065-1.263) 0.000642 1.177 (1.083-1.279) 0.000121       True              True                True
+antithrombotic          24        21 0.780 (0.656-0.927) 0.004859 0.768 (0.652-0.905) 0.001657       True              True                True
+       thyroid          88        86 0.940 (0.901-0.981) 0.004834 0.938 (0.901-0.977) 0.001879       True              True                True
+       statins          76        73 0.950 (0.887-1.017) 0.142601 0.925 (0.859-0.996) 0.039090       True             False                True
+diabetes_drugs          95        92 0.971 (0.931-1.013) 0.167914 0.964 (0.923-1.007) 0.100095       True              True                True

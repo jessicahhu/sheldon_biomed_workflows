@@ -1,14 +1,14 @@
 {
   "id": "paper_3",
   "source_paper": "Wang et al. 2026, Naunyn-Schmiedebergs Arch Pharmacol (never sent to the agent; see replication/wang2026/paper_card.md)",
-  "question": "Is genetically predicted use of each of the following medication classes causally associated with overall lung cancer risk: salicylic acid and derivatives, opioids, antithrombotic agents, thyroid preparations, HMG-CoA reductase inhibitors, and drugs used in diabetes? For each class, report the effect as an odds ratio of lung cancer per unit increase in the log-odds of using the medication, and say whether it is statistically significant at P<0.05.",
+  "question": "Is genetically predicted use of each of the following medication classes causally associated with overall lung cancer risk: salicylic acid and derivatives, opioids, antithrombotic agents, thyroid preparations, HMG-CoA reductase inhibitors, and antidiabetic drugs (drugs used in diabetes)? For each class, report the effect as an odds ratio of lung cancer per unit increase in the log-odds of using the medication, and say whether it is statistically significant at P<0.05.",
   "files": {
     "exposure_drug_use_instruments.tsv": {"from": "../../replication/wang2026/data/agent/exposure_drug_use_instruments.tsv"},
     "outcome_lung_cancer.tsv": {"from": "../../replication/wang2026/data/agent/outcome_lung_cancer.tsv"}
   },
   "data_description": "exposure_drug_use_instruments.tsv: genetic instruments for self-reported use of each medication class, from a large European-ancestry biobank GWAS (cases = people reporting use of the class). One row per (drug, SNP). The SNPs for each drug have already been selected as genome-wide significant (relaxed to P<5e-6 for a drug with too few SNPs) and LD-clumped to be approximately independent. beta = log-odds of medication use per copy of effect_allele, with its standard_error; chromosome and position_grch37 are GRCh37 coordinates.\noutcome_lung_cancer.tsv: European-ancestry lung cancer (all histologies) case-control GWAS summary statistics (log-odds betas per effect_allele), restricted to the instrument SNPs. Not every instrument SNP is present.",
   "blocked_terms": [
-    "\\bwang\\b", "sakaue", "naunyn", "schmiedeberg", "\\bkong\\b", "ebi-a", "00210", "04967", "13152963",
+    "\\bwang\\b", "sakaue", "naunyn", "schmiedeberg", "\\bkong\\b", "ebi-a", "s00210", "04967-2", "13152963",
     "\\b0\\.779\\b", "\\b0\\.676\\b", "\\b0\\.898\\b", "\\b1\\.160\\b", "\\b1\\.065\\b", "\\b1\\.263\\b",
     "\\b0\\.780\\b", "\\b0\\.656\\b", "\\b0\\.927\\b", "\\b0\\.940\\b", "\\b0\\.901\\b", "\\b0\\.981\\b",
     "\\b0\\.950\\b", "\\b0\\.887\\b", "\\b1\\.017\\b", "\\b0\\.971\\b", "\\b0\\.931\\b", "\\b1\\.013\\b"

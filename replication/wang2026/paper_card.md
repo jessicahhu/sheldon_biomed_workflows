@@ -44,4 +44,11 @@ Full table for all 23 drugs and 4 methods: [data/paper_supplement/published_resu
 
 ## Replication
 
-_Pending: see results/run_log.txt._
+Run 2026-11-26; full output in [results/run_log.txt](results/run_log.txt), IVW comparison in `results/comparison_ivw.tsv`.
+
+- **Instruments:** 22 / 46 / 29 / 120 / 104 / 118 after clumping (salicylates, opioids at P<5e-6, antithrombotics, thyroid, statins, diabetes). After dropping SNPs absent from the outcome and palindromic SNPs, 12 / 34 / 21 / 86 / 73 / 92 are used. The paper used 18 / 35 / 24 / 88 / 76 / 95; the difference comes from a different LD reference (1000G phase 3 queried directly, not the OpenGWAS panel).
+- **Score against the paper (IVW, multiplicative random effects):** direction 6/6, significance at P<0.05 4/6. All 6 published ORs fall inside our 95% CI.
+- **The two significance misses are borderline and depend on palindromic SNPs:**
+  - Salicylates: 0.850 (0.719–1.004), P=0.056, against the paper's 0.779, P=0.0005. Keeping palindromic SNPs with MAF<0.42 gives 0.804, P=0.004.
+  - Statins: 0.925 (0.859–0.996), P=0.039, against the paper's 0.950, P=0.14.
+- **Agent question:** `blind_agent/questions/paper_3.json`. The agent gets the instruments ready-made (see `scripts/make_agent_files.py`).

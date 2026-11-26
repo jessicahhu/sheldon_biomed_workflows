@@ -6,7 +6,7 @@ Can an LLM agent, given only a research question and public data, reach the answ
 - **Evaluation:** questions from published MR papers that use public GWAS data. The agent never sees the paper. Answers are scored on direction, significance and effect size.
 - **Comparison:** the same agent and questions, with and without the workflow, for a stronger and a weaker model (Claude Sonnet 5, Claude Haiku).
 - **Two-agent variant:** a Haiku researcher whose every step is reviewed by a second Haiku checker ([`multi_agent_reasoning/`](multi_agent_reasoning/)).
-- **Course context:** CS224V project, building on SHELDON. The target is 20–30 questions; 2 are done so far and a third (a 2026 paper) is being replicated.
+- **Course context:** CS224V project, building on SHELDON. The target is 20–30 questions; 3 are done so far, one of them from a 2026 paper.
 
 ## Evaluation questions
 
@@ -14,7 +14,7 @@ Can an LLM agent, given only a research question and public data, reach the answ
 |---|---|---|---|
 | `paper_1` | Zhang et al. 2015, *Hum Mol Genet* | Does longer telomere length raise lung cancer risk, and does it differ by subtype? | McKay 2017 lung GWAS (GCST004748/4744/4750) |
 | `paper_2` | Kachuri et al. 2019, *Int J Epidemiol* | Same, plus head-and-neck cancer | Above + OncoArray oral/pharyngeal GWAS (GCST012234/5) |
-| *(pending)* | Wang et al. 2026, *Naunyn-Schmiedebergs Arch Pharmacol* | Does use of common drug classes (aspirin, opioids, antithrombotics, thyroid drugs; statins and diabetes drugs as nulls) change lung cancer risk? | UK Biobank medication-use GWAS (GCST90018981–95) + McKay 2017 lung GWAS |
+| `paper_3` | Wang et al. 2026, *Naunyn-Schmiedebergs Arch Pharmacol* | Does use of common drug classes (aspirin, opioids, antithrombotics, thyroid drugs; statins and diabetes drugs as nulls) change lung cancer risk? | UK Biobank medication-use GWAS (GCST90018981–95) + McKay 2017 lung GWAS |
 
 For papers 1–2, the exposure (telomere-length SNP effects) comes from Zhang 2015 Table 2. Wang 2026 publishes no SNP list, so its instruments are rebuilt from the full exposure GWAS (see [replication/wang2026/paper_card.md](replication/wang2026/paper_card.md)).
 
@@ -30,6 +30,13 @@ Main outcomes only (paper 1: 3, paper 2: 4), 2 runs per paper = 14 estimates per
 | Claude Haiku | Baseline | 14/14 | 10/14 | Estimation: wrong IVW standard error (3 of 4 runs) |
 | Claude Haiku ×2 | Researcher + checker | 22/28 | 26/28 | Harmonisation: head-and-neck direction wrong in every run (see [below](#two-agent-system-haiku-researcher--haiku-checker-2026-11-26)) |
 | Either | With workflow | *pending* | *pending* | |
+
+**Paper 3 (Wang 2026),** 6 drug classes, 2 runs per condition = 12 estimates, scored against the published IVW results:
+
+| Model | Condition | Direction | Significance | Where it went wrong |
+|---|---|---|---|---|
+| Claude Haiku | Baseline | 12/12 | 8/12 | Harmonisation: kept palindromic SNPs, so statins and diabetes drugs come out significant |
+| Claude Haiku ×2 | Researcher + checker | 12/12 | 8/12 | Same as baseline (see [below](#paper-3-wang-2026-drug-use--lung-cancer-2026-11-26)) |
 
 All runs passed the contamination check (see [below](#contamination-check)).
 
@@ -142,6 +149,51 @@ All values are odds ratios per 1 kb (95% CI). ✓/✗ = direction / significance
 
 **Contamination.** The same check as below was run on all 8 transcripts and checker logs. There are no author, journal, consortium or accession mentions, and no reference to a published study. `4247`'s lung OR of 1.65 equals the published value, but its own IVW on 8 LD-clumped SNPs printed 1.6529 (1.4301–1.9103) before the number appears anywhere in its text.
 
+### Paper 3: Wang 2026, drug use → lung cancer (2026-11-26)
+
+This is the first question from a 2026 paper, so it is less likely to be in the models' training data. Both conditions were run: single Haiku (`run_agent.py --model claude-haiku`) and Haiku researcher + Haiku checker, 2 runs each.
+
+**What the agent gets.** Wang 2026 publishes no SNP list, so we rebuilt the instruments the paper's way:
+- P<5e-8, relaxed to P<5e-6 for opioids as in the paper.
+- LD clumping at r²<0.001 within 10 Mb against 1000 Genomes EUR, then F>10.
+- The pipeline is in `replication/wang2026/scripts/`.
+
+The agent gets these instruments ready-made, as for papers 1–2, because clumping needs an LD reference panel that the sandbox can't reach. It also gets the lung cancer GWAS rows for those SNPs (389 of 421 SNPs were found). Drug names are neutral, and the leak check blocks the authors, journal, DOI, accession numbers and all 18 published IVW odds ratios and CI bounds.
+
+**Our replication** (`replication/wang2026/results/run_log.txt`) gets 6/6 directions and 4/6 significance calls right. All 6 published ORs fall inside our 95% CIs. The two misses are borderline, and both turn on palindromic SNPs. The paper dropped them, and so does our primary analysis:
+- Salicylates: P=0.056 (paper 0.0005). Keeping palindromic SNPs gives P=0.004.
+- Statins: P=0.039 (paper 0.14).
+
+**Agent results.** IVW odds ratios per unit log-odds of drug use. The other three runs differ from the first in the second decimal place at most.
+
+| Drug | Published | Our replication | Agents (all 4 runs) | Direction / sig |
+|---|---|---|---|---|
+| Salicylates | 0.779, P=5e-4 | 0.850, P=0.056 (12 SNPs) | 0.83 (0.72–0.95), P=0.008 (16 SNPs) | ✓✓ |
+| Opioids | 1.160, P=6e-4 | 1.177, P=1e-4 (34) | 1.16–1.18, P≤7e-5 (42) | ✓✓ |
+| Antithrombotics | 0.780, P=0.005 | 0.768, P=0.002 (21) | 0.75 (0.67–0.85), P=7e-6 (23) | ✓✓ |
+| Thyroid | 0.940, P=0.005 | 0.938, P=0.002 (86) | 0.96 (0.94–0.99), P=0.008 (104) | ✓✓ |
+| Statins | 0.950, P=0.14, null | 0.925, P=0.039 (73) | 0.93 (0.89–0.98), **P=0.007** (90) | ✓✗ |
+| Diabetes drugs | 0.971, P=0.17, null | 0.964, P=0.10 (92) | 0.96 (0.93–1.00), **P=0.03** (108) | ✓✗ |
+
+**All 4 runs did the same analysis, and the checker didn't change it.**
+- Every run used fixed-effect IVW on all available SNPs. No run mentions random effects.
+- Every run aligned alleles by their labels and kept the palindromic SNPs. That's why they use more SNPs than we do (16 vs 12 for salicylates, 90 vs 73 for statins).
+- Keeping them is a defensible choice, and our own pipeline gets the same calls when it keeps them (statins P=0.015, diabetes P=0.022). The paper dropped them, so the agents disagree with it on the two negative-control drugs. The same choice is also why salicylates matches the paper's significance call when our primary analysis doesn't.
+- One two-agent run discussed palindromic variants (17 mentions) but still kept them, and its checker approved the alignment as "correct".
+
+**The checker made one real catch and raised one false alarm, both on the IVW standard error.**
+- **Real catch (`15308`):** the researcher's SE formula produced standard errors under 0.0001. The checker flagged it ("the standard errors are implausibly small (all < 0.0001)") and the researcher fixed it.
+- **False alarm (`15324`):** the researcher's first formula, `sqrt(1 / Σ βx²/σy²)`, was correct. The checker called it a "critical error", while admitting in the same review that the code computes the formula it recommends. Its proposed alternative was the same formula again. The researcher spent 5 steps (8–12) chasing the non-existent bug before returning to the standard formula, so the final answer was unaffected.
+- Neither baseline run got the SE wrong on this paper, so the final answers end up the same.
+- The checker's other concerns (6 and 7 of 16 reviews) were mostly about code mechanics: missing imports, a typo, a misnamed column.
+- As on papers 1–2, it approved both final reports without asking for a revision.
+
+**Reading.**
+- On this paper the checker added nothing to the final answer. Haiku on its own already got every direction right and matched our pipeline closely.
+- The two significance misses come from one analysis choice, keeping palindromic SNPs. Neither agent questioned it. This is the same blind spot as on paper 2, here costing significance calls rather than a direction.
+
+**Contamination.** There are no author, journal, biobank, consortium or accession mentions in any transcript or checker log, and no published value appears in any agent's code.
+
 **Next steps:**
 - Tell the checker to look specifically for palindromic and strand-ambiguous SNPs.
 - Make its final-report review check that every outcome the question asks for is present.
@@ -167,12 +219,13 @@ replication/            Hand replications (ground truth for scoring)
   zhang2015/, kachuri2019/
     paper_card.md         Paper's decisions by stage, published numbers, our scorecard
     data/  scripts/  results/
-  wang2026/               In progress: drug use -> lung cancer (2026 paper)
+  wang2026/               Drug use -> lung cancer (2026 paper)
     data/paper_supplement/  Paper's Tables S1-S2 (datasets, all published MR results)
     scripts/                fetch_exposures.sh -> build_instruments.py -> fetch_outcome.sh -> mr_wang.py
+                            -> make_agent_files.py (the agent's two blinded input files)
 blind_agent/            Runs the agent blind to the paper
   run_agent.py
-  questions/              paper_1.json, paper_2.json (question + data; paper never sent)
+  questions/              paper_1.json, paper_2.json, paper_3.json (question + data; paper never sent)
   workflows/mr.md         The workflow
   runs/                   Agent outputs (git-ignored)
 multi_agent_reasoning/  Researcher + checker system (reuses blind_agent's sandbox and blinding)

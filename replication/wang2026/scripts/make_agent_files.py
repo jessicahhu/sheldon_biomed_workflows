@@ -16,7 +16,7 @@ import pandas as pd
 inst_dir, raw_dir, out_dir = sys.argv[1:4]
 NAMES = {"salicylic_acid": "salicylic_acid_and_derivatives", "opioids": "opioids",
          "antithrombotic": "antithrombotic_agents", "thyroid": "thyroid_preparations",
-         "statins": "hmg_coa_reductase_inhibitors", "diabetes_drugs": "drugs_used_in_diabetes"}
+         "statins": "hmg_coa_reductase_inhibitors", "diabetes_drugs": "antidiabetic_drugs"}
 os.makedirs(out_dir, exist_ok=True)
 ex, out = [], []
 for name, label in NAMES.items():
