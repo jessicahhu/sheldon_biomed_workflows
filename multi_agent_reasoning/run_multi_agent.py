@@ -34,6 +34,9 @@ import run_agent as ra  # noqa: E402  (reuse sandbox, blinding, leak check, repo
 
 MAX_TURNS = 60
 MAX_REPORT_REVISIONS = 2
+MAX_NUDGES = 3  # turns that end with neither a tool call nor a final JSON answer (seen with non-Claude models)
+NUDGE = ("Your last turn ended without a tool call or a final report. Continue the analysis; when you are "
+         "finished, write the final report with all four required headings, including the JSON block.")
 CHECKER_OUTPUT_CHARS = 8000  # tool output shown to the checker per step (researcher sees up to 20,000)
 
 RESEARCHER_SYSTEM = ra.SYSTEM + """
@@ -96,7 +99,8 @@ class Checker:
         resp = call(self.client, self.model, CHECKER_SYSTEM, self.messages)
         text = "".join(b.text for b in resp.content if b.type == "text").strip() or "VERDICT: OK"
         self.messages.append({"role": "assistant", "content": text})
-        verdict = "CONCERN" if re.search(r"VERDICT:\s*CONCERN", text, re.I) else "OK"
+        verdict = ("CONCERN" if re.search(r"VERDICT:\s*CONCERN", text, re.I)
+                   else "OK" if re.search(r"VERDICT:\s*OK", text, re.I) else "NONE")
         self.reviews.append({"n": len(self.reviews) + 1, "kind": kind, "verdict": verdict, "text": text})
         return verdict, text
 
@@ -170,11 +174,12 @@ def main():
     client = ra.make_client(cfg)
     checker = Checker(client, args.checker_model, prompt)
     messages = [{"role": "user", "content": prompt}]
-    log, step, final_text, revisions = [], 0, "", 0
+    log, step, final_text, revisions, nudges = [], 0, "", 0, 0
     try:
         for _ in range(MAX_TURNS):
             resp = call(client, args.researcher_model, RESEARCHER_SYSTEM, messages, ra.TOOLS)
-            messages.append({"role": "assistant", "content": resp.content})
+            # an empty assistant turn is not a valid message; keep a placeholder so turns still alternate
+            messages.append({"role": "assistant", "content": resp.content or [{"type": "text", "text": "(no output)"}]})
             texts, steps, results = [], [], []
             for b in resp.content:
                 if b.type == "text" and b.text.strip():
@@ -198,7 +203,16 @@ def main():
                 messages.append({"role": "user", "content": results})
                 continue
 
-            # Researcher stopped calling tools: treat this turn as its final report.
+            # Researcher stopped calling tools. If there is no final JSON answer yet, ask it to continue.
+            if "Final answer (JSON)" not in ra.split_sections(final_text) and nudges < MAX_NUDGES:
+                nudges += 1
+                print(f"    no tool call and no final report (stop_reason={resp.stop_reason}); nudge {nudges}",
+                      file=sys.stderr)
+                log.append(("text", f"[harness: turn ended without a tool call or final report "
+                                    f"(stop_reason={resp.stop_reason}); asked the researcher to continue]"))
+                messages.append({"role": "user", "content": NUDGE})
+                continue
+            # Otherwise treat this turn as its final report.
             report = "\n".join(texts)
             verdict, review = checker.review(
                 "final_report", "The analyst has written its FINAL REPORT. Check that every number "

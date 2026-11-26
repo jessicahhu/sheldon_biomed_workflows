@@ -39,6 +39,9 @@ HERE = Path(__file__).resolve().parent
 VENV = HERE / ".sandbox_venv"
 MAX_TURNS = 60
 TOOL_TIMEOUT_S = 180
+MAX_NUDGES = 3  # turns that end with neither a tool call nor a final JSON answer (seen with non-Claude models)
+NUDGE = ("Your last turn ended without a tool call or a final report. Continue the analysis; when you are "
+         "finished, write the final report with all four required headings, including the JSON block.")
 
 TOOLS = [{
     "name": "run_python",
@@ -284,7 +287,7 @@ def main():
         sys.exit(1)
 
     safe_model = re.sub(r"[^A-Za-z0-9._-]+", "-", model)
-    run_dir = HERE / "runs" / q["id"] / f"{safe_model}_{condition}_{time.strftime('%Y%m%d-%H%M%S')}"
+    run_dir = HERE / "runs" / q["id"] / f"{safe_model}_{condition}_{time.strftime('%Y%m%d-%H%M%S')}-{os.getpid()}"
     sent = run_dir / "sent_to_agent"
     sent.mkdir(parents=True)
     (sent / "system_prompt.txt").write_text(system)
@@ -300,7 +303,7 @@ def main():
 
     client = make_client(cfg)
     messages = [{"role": "user", "content": prompt}]
-    log, step, final_text = [], 0, ""
+    log, step, final_text, nudges = [], 0, "", 0
     try:
         for _ in range(MAX_TURNS):
             try:
@@ -317,7 +320,7 @@ def main():
                     last.append({"type": "text", "text": "Continue."})
                 resp = client.messages.create(model=model, max_tokens=16000, system=system,
                                               messages=messages, tools=TOOLS)
-            messages.append({"role": "assistant", "content": resp.content})
+            messages.append({"role": "assistant", "content": resp.content or [{"type": "text", "text": "(no output)"}]})
             results = []
             for b in resp.content:
                 if b.type == "text" and b.text.strip():
@@ -332,6 +335,14 @@ def main():
                     results.append({"type": "tool_result", "tool_use_id": b.id, "content": out})
             if resp.stop_reason == "tool_use":
                 messages.append({"role": "user", "content": results})
+                continue
+            if "Final answer (JSON)" not in split_sections(final_text) and nudges < MAX_NUDGES:
+                nudges += 1
+                print(f"  no tool call and no final report (stop_reason={resp.stop_reason}); nudge {nudges}",
+                      file=sys.stderr)
+                log.append(("text", f"[harness: turn ended without a tool call or final report "
+                                    f"(stop_reason={resp.stop_reason}); asked the agent to continue]"))
+                messages.append({"role": "user", "content": NUDGE})
                 continue
             if resp.stop_reason == "max_tokens":
                 print("Warning: hit max_tokens; report may be truncated.", file=sys.stderr)
