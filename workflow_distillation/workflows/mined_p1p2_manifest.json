@@ -1,0 +1,192 @@
+{
+  "model": "claude-opus-5.5",
+  "train": [
+    "paper_1",
+    "paper_2"
+  ],
+  "test": [
+    "paper_3"
+  ],
+  "n_traces": 25,
+  "prompt_chars": 270258,
+  "seconds": 57,
+  "stop_reason": "end_turn",
+  "leak_hits": [],
+  "traces": [
+    {
+      "trace": "blind_agent/runs/paper_1/claude-haiku_baseline_20261119-110030",
+      "condition": "single agent (claude-haiku)",
+      "direction_correct": 3,
+      "significance_correct": 3,
+      "n_outcomes": 3
+    },
+    {
+      "trace": "blind_agent/runs/paper_1/claude-haiku_baseline_20261119-110033",
+      "condition": "single agent (claude-haiku)",
+      "direction_correct": 3,
+      "significance_correct": 2,
+      "n_outcomes": 3
+    },
+    {
+      "trace": "blind_agent/runs/paper_1/claude-sonnet-5_baseline_20261117-111440",
+      "condition": "single agent (claude-sonnet-5)",
+      "direction_correct": 3,
+      "significance_correct": 3,
+      "n_outcomes": 3
+    },
+    {
+      "trace": "blind_agent/runs/paper_1/claude-sonnet-5_baseline_20261117-113704",
+      "condition": "single agent (claude-sonnet-5)",
+      "direction_correct": 3,
+      "significance_correct": 3,
+      "n_outcomes": 3
+    },
+    {
+      "trace": "multi_agent_reasoning/runs/paper_1/claude-haiku+claude-haiku_20261126-111840",
+      "condition": "researcher claude-haiku + checker claude-haiku",
+      "direction_correct": 2,
+      "significance_correct": 3,
+      "n_outcomes": 3
+    },
+    {
+      "trace": "multi_agent_reasoning/runs/paper_1/claude-haiku+claude-haiku_20261126-111905-4246",
+      "condition": "researcher claude-haiku + checker claude-haiku",
+      "direction_correct": 3,
+      "significance_correct": 3,
+      "n_outcomes": 3
+    },
+    {
+      "trace": "multi_agent_reasoning/runs/paper_1/claude-haiku+claude-haiku_20261126-111905-4247",
+      "condition": "researcher claude-haiku + checker claude-haiku",
+      "direction_correct": 2,
+      "significance_correct": 3,
+      "n_outcomes": 3
+    },
+    {
+      "trace": "multi_agent_reasoning/runs/paper_1/claude-haiku+claude-haiku_20261126-111918-4333",
+      "condition": "researcher claude-haiku + checker claude-haiku",
+      "direction_correct": 3,
+      "significance_correct": 3,
+      "n_outcomes": 3
+    },
+    {
+      "trace": "multi_agent_reasoning/runs/paper_1/claude-haiku+claude-sonnet-5_20261126-141759-19819",
+      "condition": "researcher claude-haiku + checker claude-sonnet-5",
+      "direction_correct": 3,
+      "significance_correct": 3,
+      "n_outcomes": 3
+    },
+    {
+      "trace": "multi_agent_reasoning/runs/paper_1/claude-haiku+claude-sonnet-5_20261126-141759-19823",
+      "condition": "researcher claude-haiku + checker claude-sonnet-5",
+      "direction_correct": 3,
+      "significance_correct": 3,
+      "n_outcomes": 3
+    },
+    {
+      "trace": "multi_agent_reasoning/runs/paper_1/claude-sonnet-5+claude-haiku_20261126-141759-19821",
+      "condition": "researcher claude-sonnet-5 + checker claude-haiku",
+      "direction_correct": 3,
+      "significance_correct": 3,
+      "n_outcomes": 3
+    },
+    {
+      "trace": "multi_agent_reasoning/runs/paper_1/claude-sonnet-5+claude-haiku_20261126-141759-19822",
+      "condition": "researcher claude-sonnet-5 + checker claude-haiku",
+      "direction_correct": 3,
+      "significance_correct": 3,
+      "n_outcomes": 3
+    },
+    {
+      "trace": "multi_agent_reasoning/runs/paper_1/claude-sonnet-5+claude-sonnet-5_20261126-141759-19820",
+      "condition": "researcher claude-sonnet-5 + checker claude-sonnet-5",
+      "direction_correct": 3,
+      "significance_correct": 3,
+      "n_outcomes": 3
+    },
+    {
+      "trace": "multi_agent_reasoning/runs/paper_1/claude-sonnet-5+claude-sonnet-5_20261126-141759-19824",
+      "condition": "researcher claude-sonnet-5 + checker claude-sonnet-5",
+      "direction_correct": 3,
+      "significance_correct": 3,
+      "n_outcomes": 3
+    },
+    {
+      "trace": "blind_agent/runs/paper_2/claude-haiku_baseline_20261119-110036",
+      "condition": "single agent (claude-haiku)",
+      "direction_correct": 4,
+      "significance_correct": 3,
+      "n_outcomes": 4
+    },
+    {
+      "trace": "blind_agent/runs/paper_2/claude-haiku_baseline_20261119-110039",
+      "condition": "single agent (claude-haiku)",
+      "direction_correct": 4,
+      "significance_correct": 2,
+      "n_outcomes": 4
+    },
+    {
+      "trace": "blind_agent/runs/paper_2/claude-sonnet-5_baseline_20261117-112053",
+      "condition": "single agent (claude-sonnet-5)",
+      "direction_correct": 3,
+      "significance_correct": 4,
+      "n_outcomes": 4
+    },
+    {
+      "trace": "blind_agent/runs/paper_2/claude-sonnet-5_baseline_20261117-114051",
+      "condition": "single agent (claude-sonnet-5)",
+      "direction_correct": 4,
+      "significance_correct": 4,
+      "n_outcomes": 4
+    },
+    {
+      "trace": "multi_agent_reasoning/runs/paper_2/claude-haiku+claude-haiku_20261126-111841",
+      "condition": "researcher claude-haiku + checker claude-haiku",
+      "direction_correct": 3,
+      "significance_correct": 2,
+      "n_outcomes": 4
+    },
+    {
+      "trace": "multi_agent_reasoning/runs/paper_2/claude-haiku+claude-haiku_20261126-111843",
+      "condition": "researcher claude-haiku + checker claude-haiku",
+      "direction_correct": 3,
+      "significance_correct": 4,
+      "n_outcomes": 4
+    },
+    {
+      "trace": "multi_agent_reasoning/runs/paper_2/claude-haiku+claude-haiku_20261126-111905-4248",
+      "condition": "researcher claude-haiku + checker claude-haiku",
+      "direction_correct": 3,
+      "significance_correct": 4,
+      "n_outcomes": 4
+    },
+    {
+      "trace": "multi_agent_reasoning/runs/paper_2/claude-haiku+claude-haiku_20261126-111905-4249",
+      "condition": "researcher claude-haiku + checker claude-haiku",
+      "direction_correct": 3,
+      "significance_correct": 4,
+      "n_outcomes": 4
+    },
+    {
+      "trace": "multi_agent_reasoning/runs/paper_2/claude-haiku+claude-sonnet-5_20261126-142625-20686",
+      "condition": "researcher claude-haiku + checker claude-sonnet-5",
+      "direction_correct": 3,
+      "significance_correct": 4,
+      "n_outcomes": 4
+    },
+    {
+      "trace": "multi_agent_reasoning/runs/paper_2/claude-sonnet-5+claude-haiku_20261126-142624-20672",
+      "condition": "researcher claude-sonnet-5 + checker claude-haiku",
+      "direction_correct": 3,
+      "significance_correct": 4,
+      "n_outcomes": 4
+    },
+    {
+      "trace": "multi_agent_reasoning/runs/paper_2/claude-sonnet-5+claude-sonnet-5_20261126-142424-20457",
+      "condition": "researcher claude-sonnet-5 + checker claude-sonnet-5",
+      "direction_correct": 3,
+      "significance_correct": 4,
+      "n_outcomes": 4
+    }
+  ]
+}

@@ -29,7 +29,9 @@ Main outcomes only (paper 1: 3, paper 2: 4), 2 runs per paper = 14 estimates per
 | Claude Sonnet 5 | Baseline | 13/14 | 14/14 | Harmonisation: palindromic SNP, invented proxy (1 run) |
 | Claude Haiku | Baseline | 14/14 | 10/14 | Estimation: wrong IVW standard error (3 of 4 runs) |
 | Claude Haiku ×2 | Researcher + checker | 22/28 | 26/28 | Harmonisation: head-and-neck direction wrong in every run (see [below](#two-agent-system-haiku-researcher--haiku-checker-2026-11-26)) |
-| Either | With workflow | *pending* | *pending* | |
+| Claude Haiku | Expert workflow (`mr.md`) | 14/14 | 14/14 | None on papers 1–2 (see [below](#workflows-expert-vs-mined-by-a-strong-model-2026-11-26)) |
+
+The full matrix, covering every model pairing, both workflows and GLM, is [below](#all-conditions-by-paper-2026-11-26).
 
 **Paper 3 (Wang 2026),** 6 drug classes, 2 runs per condition = 12 estimates, scored against the published IVW results:
 
@@ -133,7 +135,7 @@ All values are odds ratios per 1 kb (95% CI). ✓/✗ = direction / significance
   - The likely cause is rs6772228, an A/T palindromic SNP and the head-and-neck instrument with the largest exposure effect (0.12 kb).
   - Flipping it by allele labels alone gives the opposite sign from our replication, which aligns it the other way.
   - In `4248` the checker told the researcher to flip it by its labels and never mentioned that it is palindromic. Neither agent ever handled palindromic SNPs.
-  - This is the failure Sonnet showed in the baseline, and here the checker made it more likely. I haven't traced every run, so this cause is probable, not confirmed.
+  - **Update (confirmed):** the checker did not cause this error; it exposed it by fixing the standard-error bug. Single Haiku got head-and-neck right only by accident. See [why some setups work better](#why-some-setups-work-better-2026-11-26).
 - **The two paper 1 squamous "direction" misses are not real errors.** The ORs are 1.01 and 1.02 (P≈0.85). The published value is 1.04 and our replication is 0.96, so the direction rule is fragile for a null this close to 1.
 
 **How the agents interacted:**
@@ -194,10 +196,112 @@ The agent gets these instruments ready-made, as for papers 1–2, because clumpi
 
 **Contamination.** There are no author, journal, biobank, consortium or accession mentions in any transcript or checker log, and no published value appears in any agent's code.
 
-**Next steps:**
-- Tell the checker to look specifically for palindromic and strand-ambiguous SNPs.
-- Make its final-report review check that every outcome the question asks for is present.
-- Run the same two-agent set-up with the workflow.
+### All conditions by paper (2026-11-26)
+
+These are all completed runs as of 2026-11-26. In each pairing, the researcher is named first. Each cell gives direction and significance correct, with the number of runs in brackets. Papers have 3, 4 and 6 outcomes respectively. The run-by-run list comes from `python3 multi_agent_reasoning/list_runs.py`.
+
+| Condition | Paper 1 | Paper 2 | Paper 3 | Total direction | Total significance |
+|---|---|---|---|---|---|
+| Haiku alone | 6/6, 5/6 (2) | 8/8, 5/8 (2) | 12/12, 8/12 (2) | 26/26 | 18/26 |
+| Haiku + expert workflow | 6/6, 6/6 (2) | 8/8, 8/8 (2) | 12/12, 8/12 (2) | 26/26 | **22/26** |
+| Haiku + mined workflow | – | – | 12/12, 8/12 (2) | 12/12 | 8/12 |
+| Sonnet alone | 6/6, 6/6 (2) | 7/8, 8/8 (2) | 12/12, 7/12 (2) | 25/26 | 21/26 |
+| GLM alone | 6/6, 6/6 (2) | failed (2) | not run | 6/6 | 6/6 |
+| Haiku + Haiku checker | 10/12, 12/12 (4) | 12/16, 14/16 (4) | 12/12, 8/12 (2) | 34/40 | 34/40 |
+| Haiku + Sonnet checker | 6/6, 6/6 (2) | 7/8, 8/8 (2) | 12/12, 7/12 (2) | 25/26 | 21/26 |
+| Sonnet + Haiku checker | 6/6, 6/6 (2) | 6/8, 8/8 (2) | 12/12, 6/12 (2) | 24/26 | 20/26 |
+| Sonnet + Sonnet checker | 6/6, 6/6 (2) | 6/8, 8/8 (2) | 12/12, 6/12 (2) | 24/26 | 20/26 |
+| Haiku + GLM checker | 6/6, 6/6 (2) | 3/4, 4/4 (1) | not run | 9/10 | 10/10 |
+| GLM + Haiku checker | 6/6, 6/6 (2) | failed (2) | not run | 6/6 | 6/6 |
+
+**Comparable rows.** Only rows with 2 runs on each of papers 1–3 can be compared directly: Haiku alone, Haiku + expert workflow, Sonnet alone, and the three pairings involving Sonnet. The GLM rows mostly cover paper 1, the easiest, and the mined workflow covers only paper 3.
+
+**Why runs are missing.**
+- **"Failed":** with GLM as researcher, all 4 paper 2 runs, alone and with a checker, used the full 16,000-token output limit on turn after turn and returned nothing visible. That's most likely hidden reasoning counting against the limit. Three continue-prompts didn't help, and no answer was produced. These failures appear to have used much of the budget.
+- **"Not run":** the gateway key reached its $100 budget during the GLM queue, so the remaining paper 2–3 GLM runs were refused.
+
+### Workflows: expert vs mined by a strong model (2026-11-26)
+
+This experiment is on the branch `workflow-distillation` (folder [`workflow_distillation/`](workflow_distillation/)). Can a strong model turn earlier agent runs into a workflow that a weak model can follow?
+- **Mining.** Claude Opus 5.5 read 25 scored traces from papers 1–2: every single-agent and two-agent run, with its methodology, results, checker concerns, and which outcomes it got right or wrong.
+- **What it wrote.** A general step-by-step workflow ([`mined_p1p2.md`](workflow_distillation/workflows/mined_p1p2.md)), told not to name any SNP, gene, drug or result.
+- **Held out.** The workflow was tested only on paper 3, which shares no data with papers 1–2. Papers 1 and 2 share the lung GWAS, so they're always kept in the same fold.
+- **Leak check.** The workflow passed the leak check for paper 3: no blocked terms and no rsIDs.
+
+**The mined workflow matches the expert workflow.** On paper 3 both score 12/12 direction and 8/12 significance, the same as no workflow. Both bring the estimates about 35% closer to the published values: the mean absolute difference in log OR is 0.025 with no workflow, 0.016 with the expert workflow and 0.017 with the mined one. Salicylates, for example, move from 0.83 to 0.78 against a published 0.779.
+
+**The expert workflow helps most on papers 1–2.** It takes Haiku from 10/14 to 14/14 on significance there, because it fixes the standard-error bug, as explained below.
+
+**Haiku followed both workflows closely.** Palindromic SNPs come up 83–129 times in each workflow transcript, against 0 in single-Haiku runs on paper 2.
+
+**The reverse fold is not run yet:** mining from paper 3 and testing on papers 1–2. It was blocked by the budget.
+
+### Why some setups work better (2026-11-26)
+
+Each claim below was checked against the run files.
+
+**1. Checkers and workflows fix Haiku's standard-error bug, and that drives most of Haiku's gains.**
+- **The test.** We flagged every estimate whose CI implies a standard error less than half our replication's.
+- **Where it shows up.** Flagged estimates appear in 3 of 6 Haiku-alone runs (14 of 29 estimates) and in 1 of 10 Haiku + Haiku checker runs.
+- **Where it doesn't.** There are none in any run with a workflow, a Sonnet or GLM checker, or a Sonnet or GLM researcher.
+- **What it explains.** Most of the significance gap between Haiku alone and every other setup on papers 1–2 is this one bug.
+
+**2. On paper 2, fixing that bug exposed a hidden alignment error. That's why two-agent runs get head-and-neck wrong.**
+- **The problem SNP.** rs6772228 is an A/T palindromic SNP. Its allele frequency is about 0.05 in the lung files but 0.95 in the head-and-neck files, which means the two sources report it on opposite strands.
+- **Label alignment points the wrong way.** Aligning it by allele labels alone gives head-and-neck ORs of 1.17 (set A) and 1.12 (set B), the wrong direction. Dropping it gives 0.92 and 0.86, the target direction. Agents' reported values match these calculations exactly. Run `4248` reported A 1.17, B 1.10; the expert-workflow runs reported 0.92 and 0.86 with 4 SNPs.
+- **Single Haiku was right by accident.** With the label-based alignment, its *buggy* weights (1/σ² on the ratios) reproduce its reported 0.95 and 0.96 exactly. Those weights ignore the exposure effect size, which down-weights rs6772228, the SNP with the largest exposure effect. Two errors cancelled.
+- **Once the formula is fixed, the alignment error decides the sign.** Head-and-neck is wrong or missing in 10 of 11 two-agent paper 2 runs, across all pairings, against 1 of 6 single-agent runs.
+- **The one two-agent catch.** It came from a Sonnet checker reviewing Haiku (run `21656`). The checker pointed out the 0.05 vs 0.95 frequency mismatch, the researcher dropped the SNP, and the run scored 4/4. The other Haiku + Sonnet run, and both Sonnet + Sonnet runs, missed it.
+- **The expert workflow's palindromic-SNP rule fixed it in both of its runs.**
+
+**3. On paper 3, significance mostly reflects which defensible choice a run made, not competence.**
+- **The two choices that decide the calls** are whether palindromic SNPs are kept, and fixed- vs random-effects IVW. Runs fall into three groups:
+  - **Haiku with no Sonnet involved:** kept palindromic SNPs and used fixed effects (16 salicylate SNPs), so all 6 drugs come out significant (pattern SSSSSS).
+  - **Workflow runs:** used fixed effects with partial palindrome handling (SSSnSn).
+  - **Sonnet runs, as researcher or checker:** used random effects with some palindromic SNPs kept (SSSnSS). That's exactly what our own replication gives when it keeps palindromic SNPs.
+- **One run reproduced our replication exactly.** A Haiku + Sonnet-checker run used our instrument counts (12 salicylate SNPs, 86 thyroid SNPs) with random effects, and matched our primary analysis pattern (nSSSSn).
+- **No choice we tested reaches the paper's pattern (SSSSnn).** Statins come out significant in every run and in our replication. With our rebuilt instruments, about 4 of 6 is the ceiling, so paper 3 can't separate the setups on significance.
+
+**4. Different checkers behave differently, but objecting more isn't the same as catching more.**
+
+| Pairing | Step concerns | Final-report concerns |
+|---|---|---|
+| Haiku researcher, Haiku checker (10 runs) | 39% | 1 of 11 |
+| Haiku researcher, Sonnet checker (6) | 65% | 1 of 7 |
+| Haiku researcher, GLM checker (3) | 47% | 2 of 5 |
+| Sonnet researcher, Haiku checker (6) | 34% | 2 of 8 |
+| Sonnet researcher, Sonnet checker (6) | 40% | 4 of 10 |
+| GLM researcher, Haiku checker (2) | 59% | 0 of 2 |
+
+- **Sonnet as checker objects most,** and it made the only palindrome catch. The one confirmed false alarm, a correct IVW formula called a "critical error" on paper 3, came from a Haiku checker.
+- **Checkers rarely challenge a final report.** Only Sonnet checking Sonnet does so often.
+- **Pairings help Haiku but not Sonnet.**
+  - Haiku with any checker beats Haiku alone on significance (Haiku + Sonnet checker 21/26 vs 18/26), because the checker removes the standard-error bug.
+  - Sonnet with either checker scores below Sonnet alone (20/26 vs 21/26). The Sonnet pairings get head-and-neck wrong in both paper 2 runs, and Sonnet has no visible bug for a checker to fix.
+- **The checker's value depends on what the researcher gets wrong.** It helps when the researcher's errors show up in the code and output (Haiku's standard errors). It adds nothing when the researcher's errors are judgement calls the checker shares (alignment, palindromic SNPs).
+
+**Summary.**
+- The setups differ less in how well they reason than in *which* error they make.
+- The biggest single gain comes from a domain rule written down explicitly, the palindrome and standard-error checks, whether a human wrote the workflow or Opus mined it.
+- Peer review between agents helps only for errors that are visible in what the checker is shown.
+
+### Harness changes on 2026-11-26
+
+These changes affect how some results above were produced:
+- **Continue-prompt.** If a turn ends with no tool call and no final JSON answer, the agent is told to continue, up to 3 times, and each prompt is logged in the transcript. Runs started before 14:38 used the old runner.
+- **Missing verdicts.** A checker reply with no `VERDICT:` line is now recorded as `NONE`, not OK.
+- **Unique folder names.** Baseline run folders now include the process ID, so parallel runs can't collide.
+- **Scoring paper 3.** The scorer finds the drug name in any text field of a result row.
+- **Results fixed by hand.** Three results were repaired from the agent's own report, each marked inside its `result.json`:
+  - `111843` and `21656`: the final JSON was in the transcript, but the old runner didn't parse it.
+  - `22947`: unlabelled drug rows, labelled from the report's stated table order. The original is kept as `result.original.json`.
+
+**Next steps (blocked until the gateway budget is raised):**
+- Mining fold B: mine from paper 3, test on papers 1–2.
+- Haiku + GLM checker on paper 3.
+- GLM as researcher with a higher output-token limit.
+- More runs per cell, since every cell has 2.
+- A planted-error benchmark to measure checker recall and precision directly.
 
 ## Contamination check
 
@@ -231,7 +335,11 @@ blind_agent/            Runs the agent blind to the paper
 multi_agent_reasoning/  Researcher + checker system (reuses blind_agent's sandbox and blinding)
   run_multi_agent.py
   score.py                Scores any run's result.json against the scoreboard targets
+  matrix.py, list_runs.py Condition-by-paper table; every completed run with its scores
   runs/                   Outputs, incl. checker_reviews.json (git-ignored)
+workflow_distillation/  Branch workflow-distillation: a strong model mines workflows from scored runs
+  mine_workflow.py        Held-out mining (papers 1-2 and paper 3 are separate folds) + leak check
+  workflows/              Mined workflows, with the exact prompt and a manifest of traces used
 ```
 
 ## Running the agent
@@ -268,6 +376,14 @@ uv run --python 3.12 --with anthropic python multi_agent_reasoning/run_multi_age
 python3 multi_agent_reasoning/score.py multi_agent_reasoning/runs/paper_*/*   # or blind_agent/runs/paper_*/*
 ```
 Each run writes the same files as above, plus `checker_reviews.json` with every verdict. Its `transcript.md` shows the checker's reviews between the researcher's steps.
+
+**Mined workflow.** Mine with Opus from the training papers, then run the weak model with the workflow:
+```bash
+uv run --python 3.12 --with anthropic python workflow_distillation/mine_workflow.py \
+    --train paper_1 paper_2 --test paper_3 --out workflow_distillation/workflows/mined_p1p2.md
+cd blind_agent && uv run --python 3.12 --with anthropic python run_agent.py questions/paper_3.json \
+    --model claude-haiku --workflow ../workflow_distillation/workflows/mined_p1p2.md
+```
 
 **Caveat.** The model may still remember these papers. The code log shows whether it computed its answers itself; see [Contamination check](#contamination-check).
 
